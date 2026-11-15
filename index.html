@@ -1,675 +1,254 @@
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#090d1b">
-<title>OYUN REHBERİ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oyun Rehberi | 69 Oyun</title>
 <style>
+:root{--bg:#080d18;--panel:#111b2d;--panel2:#17243a;--blue:#168cff;--text:#f4f7ff;--muted:#9aabc5}
 *{box-sizing:border-box}
-body{
- margin:0;background:#090d1b;color:white;
- font-family:Arial,sans-serif;
- background-image:radial-gradient(circle at 15% 10%,#25205b,transparent 35%),radial-gradient(circle at 85% 80%,#142e55,transparent 35%);
-}
-header{text-align:center;padding:38px 15px 22px}
-header h1{font-size:clamp(30px,5vw,46px);color:#a99cff;text-shadow:0 0 20px #6554ff;margin:0}
-header p{color:#aab2d1}
-.controls{max-width:1150px;margin:20px auto;padding:0 15px;display:flex;gap:10px;flex-wrap:wrap}
-input,select,textarea{background:#151b31;color:white;border:1px solid #343c61;border-radius:10px;padding:13px;font:inherit}
-input:focus,select:focus,textarea:focus{outline:2px solid #8878ff}
-#search{flex:1;min-width:200px}
-#games{max-width:1150px;margin:20px auto;padding:0 15px;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
-.card{background:#151b31;border:1px solid #293253;border-radius:15px;overflow:hidden;cursor:pointer;transition:.2s}
-.card:hover{transform:translateY(-5px);border-color:#8878ff;box-shadow:0 10px 30px #6554ff35}
-.cover{height:140px;display:flex;align-items:center;justify-content:center;font-size:65px;background:linear-gradient(135deg,#242052,#17416b)}
-.info{padding:14px}
-.info h3{margin:0 0 10px}
-.tag{display:inline-block;background:#28234b;color:#c2baff;padding:5px 8px;border-radius:7px;font-size:12px}
-.platform{color:#9da8c7;font-size:12px;margin-left:8px}
-.info p{color:#aab2c9;font-size:13px;line-height:1.5}
-#modal{display:none;position:fixed;inset:0;background:#000d;z-index:10;overflow:auto;padding:15px}
-.modalbox{max-width:760px;margin:25px auto;background:#141a30;border:1px solid #454b78;border-radius:18px;padding:24px;position:relative}
-.close{float:right;background:#302d55;color:white;border:0;padding:10px 14px;border-radius:8px;cursor:pointer}
-#detailEmoji{font-size:75px;text-align:center;padding:22px;background:linear-gradient(135deg,#242052,#17416b);border-radius:12px;clear:both}
-.modalbox h2{color:#b5aaff}
-.modalbox p{color:#d0d5e8;line-height:1.7;white-space:pre-line}
-.meta{color:#a99cff!important;font-size:13px}
-.download{display:inline-block;background:#6c58e8;color:white;text-decoration:none;padding:12px 17px;border-radius:9px;margin:8px 0}
-hr{border:0;border-top:1px solid #343c61;margin:20px 0}
-textarea{width:100%;min-height:85px;resize:vertical}
-button{cursor:pointer}
-#send{background:#6c58e8;color:white;border:0;padding:11px 17px;border-radius:8px;margin-top:8px}
-.comment{background:#202844;padding:12px;border-radius:8px;margin:8px 0;overflow-wrap:anywhere}
-.empty{grid-column:1/-1;text-align:center;color:#aab2c9;padding:35px}
-footer{text-align:center;color:#7883a5;padding:30px 15px}
-@media(max-width:550px){.controls{display:grid;grid-template-columns:1fr 1fr}#search{grid-column:1/-1}.modalbox{padding:16px}}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
+header{background:linear-gradient(120deg,#071a35,#102e55,#071a35);padding:35px 6%;border-bottom:1px solid #24466f}
+header h1{margin:0;font-size:34px}
+header h1 span{color:#38a4ff}
+header p{color:#c2d4ec;margin-bottom:0}
+nav{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:15px 6%;background:#0c1423;position:sticky;top:0;z-index:5;border-bottom:1px solid #20304a}
+.logo{font-weight:bold;color:#48aaff;font-size:19px}
+.search{width:min(420px,65%);padding:12px 15px;border:1px solid #304766;border-radius:9px;background:#101d30;color:white;font-size:15px;outline:none}
+.search:focus{border-color:#168cff}
+main{padding:25px 6%}
+.topline{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+h2{margin:8px 0 18px}
+.count{color:#55b0ff;font-weight:bold}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0 25px}
+.filters button{background:#14243a;color:#c8d9ee;border:1px solid #29415f;border-radius:20px;padding:9px 15px;cursor:pointer}
+.filters button.active,.filters button:hover{background:#087ce0;color:white;border-color:#168cff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:17px}
+.card{background:var(--panel);border:1px solid #22344e;border-radius:13px;overflow:hidden;cursor:pointer;transition:.2s}
+.card:hover{transform:translateY(-5px);border-color:#168cff;box-shadow:0 8px 25px #0007}
+.cover{height:135px;background:linear-gradient(135deg,#142c4c,#0a1729);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.cover img{width:100%;height:100%;object-fit:cover;display:block}
+.cover .emoji{font-size:55px}
+.cardbody{padding:13px}
+.card h3{margin:0 0 9px;font-size:17px}
+.meta{color:var(--muted);font-size:12px}
+.tag{display:inline-block;background:#12365b;color:#76c2ff;padding:5px 9px;border-radius:15px;font-size:11px;margin-top:10px}
+.empty{text-align:center;color:var(--muted);padding:50px;display:none}
+footer{text-align:center;color:#8495ae;padding:30px;border-top:1px solid #20304a;margin-top:35px}
+.modal{display:none;position:fixed;inset:0;background:#000c;z-index:10;align-items:center;justify-content:center;padding:18px}
+.modal.show{display:flex}
+.modalbox{background:#101d30;border:1px solid #315174;border-radius:15px;width:min(650px,100%);max-height:90vh;overflow:auto;padding:22px;position:relative}
+.close{position:absolute;right:15px;top:12px;background:#263a55;color:white;border:0;border-radius:7px;padding:8px 12px;cursor:pointer}
+.modalcover{height:190px;background:#142b49;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;margin:25px 0 15px}
+.modalcover img{width:100%;height:100%;object-fit:cover}
+.modalcover span{font-size:65px}
+.modalbox h2{margin-bottom:8px}
+.modalbox p{line-height:1.6;color:#c5d4e8}
+.detail{background:#172940;padding:12px;border-radius:9px;color:#b9cbe2;line-height:1.7;font-size:14px}
+.play{display:inline-block;background:#087ce0;color:white;text-decoration:none;padding:12px 20px;border-radius:8px;margin-top:15px;font-weight:bold}
+@media(max-width:600px){header h1{font-size:26px}nav{padding:12px 4%}main{padding:20px 4%}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cover{height:105px}.card h3{font-size:14px}}
 </style>
 </head>
 <body>
-
 <header>
-<h1>🎮 OYUN REHBERİ</h1>
-<p>Oyunları keşfet, detaylarını öğren ve kendi oyununu bul!</p>
+<h1>OYUN <span>REHBERİ</span></h1>
+<p>Oyunları keşfet, bilgilerini öğren ve yeni maceralara başla.</p>
 </header>
-
-<div class="controls">
-<input id="search" placeholder="🔎 Oyun ara..." type="search">
-<select id="platform">
-<option value="Hepsi">Tüm platformlar</option>
-<option value="PC">PC</option>
-<option value="Mobil">Mobil</option>
-<option value="PC ve Mobil">PC ve Mobil</option>
-</select>
-<select id="genre">
-<option value="Hepsi">Tüm türler</option>
-<option>FPS</option>
-<option>Aksiyon</option>
-<option>Macera</option>
-<option>Strateji</option>
-<option>Simülasyon</option>
-<option>Yarış</option>
-<option>Sandbox</option>
-<option>Platform</option>
-<option>Bulmaca</option>
-<option>Hayatta Kalma</option>
-<option>RPG</option>
-</select>
+<nav>
+<div class="logo">🎮 OYUN REHBERİ</div>
+<input class="search" id="search" placeholder="Oyun ara..." autocomplete="off">
+</nav>
+<main>
+<div class="topline">
+<h2>Oyun Kütüphanesi</h2>
+<div class="count" id="count">69 OYUN</div>
 </div>
+<div class="filters" id="filters">
+<button class="active" data-filter="Hepsi">Hepsi</button>
+<button data-filter="FPS">FPS</button>
+<button data-filter="Aksiyon">Aksiyon</button>
+<button data-filter="RPG">RPG</button>
+<button data-filter="Simülasyon">Simülasyon</button>
+<button data-filter="Strateji">Strateji</button>
+<button data-filter="Yarış">Yarış</button>
+<button data-filter="Platform">Platform</button>
+<button data-filter="Hayatta Kalma">Hayatta Kalma</button>
+<button data-filter="Bulmaca">Bulmaca</button>
+</div>
+<div class="grid" id="games"></div>
+<div class="empty" id="empty">Aradığın oyun bulunamadı.</div>
+</main>
+<footer>© 2026 Oyun Rehberi · Bağımsız oyun tanıtım platformu</footer>
 
-<main id="games"></main>
-
-<div id="modal">
+<div class="modal" id="modal">
 <div class="modalbox">
-<button class="close" onclick="closeModal()">✕ Kapat</button>
-<div id="detailEmoji"></div>
-<h2 id="detailName"></h2>
-<p id="detailMeta" class="meta"></p>
-<hr>
-<h3>📖 Oyun hakkında</h3>
-<p id="detailDescription"></p>
-<h3>🎮 Oynanış ve özellikler</h3>
-<p id="detailHow"></p>
-<h3>💻 Platform ve teknik bilgiler</h3>
-<p id="detailTechnical"></p>
-<a id="download" class="download" target="_blank" rel="noopener noreferrer">🌐 Resmî oyun sayfası</a>
-<hr>
-<h3>💬 Oyuncu yorumları</h3>
-<div id="comments"></div>
-<textarea id="commentInput" maxlength="500" placeholder="Bu oyun hakkındaki düşünceni yaz..."></textarea>
-<button id="send" onclick="addComment()">Yorum gönder</button>
-<p class="meta">Yorumlar bu tarayıcıda saklanır. Başka cihazlarda görünmez.</p>
+<button class="close" id="close">Kapat ✕</button>
+<div class="modalcover" id="modalcover"></div>
+<h2 id="modalname"></h2>
+<div class="meta" id="modalmeta"></div>
+<p id="modaldesc"></p>
+<div class="detail" id="modalinfo"></div>
+<a class="play" id="play" href="#" target="_blank" rel="noopener">Oyunun sayfasına git ↗</a>
 </div>
 </div>
-
-<footer>OYUN REHBERİ © 2026 • Oyun dünyasını keşfet! 🎮</footer>
 
 <script>
-const games=[
-{
-name:"VALORANT",genre:"FPS",platform:"PC",emoji:"🎯",developer:"Riot Games",year:"2020",mode:"5'e 5 çevrim içi rekabetçi",
-size:"Değişken",
-url:"https://playvalorant.com/",
-description:`VALORANT, oyuncuların iki takıma ayrıldığı taktiksel birinci şahıs nişancı oyunudur. Her takımda beş oyuncu bulunur. Oyunda saldırı ve savunma tarafları vardır.
-
-Oyuncular farklı yeteneklere sahip ajanlardan birini seçer. Her ajanın takım savaşlarında kullanılabilen kendine özgü özellikleri bulunur.
-
-Oyunun temel amacı saldırı tarafındayken Spike adlı cihazı kurmak ve patlamasını sağlamak; savunma tarafındayken ise bunu engellemektir.
-
-VALORANT, yalnızca hızlı nişan almaya değil, takım iletişimine, harita bilgisine ve doğru karar vermeye de önem verir.`,
-how:`• Farklı ajanlar ve özel yetenekler
-• Rekabetçi dereceli maçlar
-• Derecesiz oyun modu
-• Spike Rush ve diğer alternatif modlar
-• Farklı haritalar
-• Silah satın alma ekonomisi
-• Takım koordinasyonu ve strateji
-• Sezonluk içerikler`,
-technical:"Platform: Windows PC\nOyuncu sayısı: 5'e 5\nGeliştirici: Riot Games\nÇıkış yılı: 2020\nKurulum boyutu: Güncellemelere göre değişir."
-},
-{
-name:"Counter-Strike 2",genre:"FPS",platform:"PC",emoji:"🔫",developer:"Valve",year:"2023",mode:"Çevrim içi takım oyunu",size:"Değişken",
-url:"https://www.counter-strike.net/cs2",
-description:`Counter-Strike 2, teröristler ve karşı teröristler olarak iki takımın mücadele ettiği rekabetçi bir FPS oyunudur.
-
-Oyuncular her turda görevlerini tamamlamaya çalışır. Bazı maçlarda saldırı takımı bomba kurmaya çalışırken savunma takımı bunu engeller.
-
-Oyunda silah kontrolü, harita bilgisi, takım iletişimi ve doğru pozisyon almak önemlidir. Her turun sonunda kazanılan parayla yeni ekipman satın alınabilir.`,
-how:`• Rekabetçi ve sıradan maçlar
-• Takım tabanlı mücadele
-• Farklı silahlar ve ekipmanlar
-• Duman bombalarının gelişmiş etkileşimi
-• Haritalarda stratejik noktalar
-• Derecelendirme sistemi
-• Steam topluluğu ve kullanıcı içerikleri`,
-technical:"Platform: Windows PC\nOyuncu sayısı: Takım tabanlı\nGeliştirici: Valve\nÇıkış yılı: 2023\nKurulum boyutu: Güncellemelerle değişir."
-},
-{
-name:"Minecraft",genre:"Sandbox",platform:"PC ve Mobil",emoji:"⛏️",developer:"Mojang Studios",year:"2011",mode:"Tek oyunculu ve çok oyunculu",size:"Değişken",
-url:"https://www.minecraft.net/",
-description:`Minecraft, bloklardan oluşan geniş bir dünyada keşif yapabildiğin, yapılar inşa edebildiğin ve kendi maceranı oluşturabildiğin sandbox oyunudur.
-
-Oyunda kaynak toplayabilir, araçlar üretebilir, evler ve büyük yapılar kurabilirsin. Dünyalar farklı biyomlardan, mağaralardan, köylerden ve çeşitli canlılardan oluşur.
-
-Hayatta Kalma modunda kaynaklarını yönetmen ve tehlikelere karşı hazırlıklı olman gerekir. Yaratıcı modda ise sınırsız yapı malzemesiyle istediğin tasarımı yapabilirsin.`,
-how:`• Hayatta Kalma modu
-• Yaratıcı mod
-• Çok oyunculu sunucular
-• Köyler ve farklı biyomlar
-• Maden kazma ve eşya üretme
-• Tarım ve hayvan yetiştirme
-• Redstone mekanizmaları
-• Büyük yapılar tasarlama`,
-technical:"Platform: PC, Android ve iOS sürümleri\nOyuncu sayısı: Tek oyunculu veya çok oyunculu\nGeliştirici: Mojang Studios\nÇıkış yılı: 2011\nSürüme göre özellikler değişebilir."
-},
-{
-name:"Roblox",genre:"Sandbox",platform:"PC ve Mobil",emoji:"🧱",developer:"Roblox Corporation",year:"2006",mode:"Çevrim içi çok oyunculu",size:"Değişken",
-url:"https://www.roblox.com/",
-description:`Roblox, kullanıcıların kendi oyunlarını ve deneyimlerini oluşturabildiği, aynı zamanda diğer oyuncuların hazırladığı binlerce farklı deneyimi oynayabildiği çevrim içi bir platformdur.
-
-Platformda yarış, korku, rol yapma, macera, simülasyon ve rekabetçi oyunlar gibi pek çok farklı tür bulunur.
-
-Oyuncular avatarlarını özelleştirebilir, arkadaşlarıyla deneyimlere katılabilir ve kendi oyunlarını geliştirmek için Roblox Studio kullanabilir.`,
-how:`• Kullanıcı yapımı oyunlar
-• Arkadaşlarla çevrim içi oynama
-• Avatar özelleştirme
-• Roblox Studio ile oyun geliştirme
-• Farklı oyun türleri
-• Gruplar ve topluluk özellikleri
-• Bazı deneyimlerde özel görevler ve etkinlikler`,
-technical:"Platform: PC, Android, iOS ve desteklenen diğer cihazlar\nOyuncu sayısı: Deneyime göre değişir\nGeliştirici: Roblox Corporation\nÇıkış yılı: 2006\nİçerikler kullanıcılar tarafından hazırlanır."
-},
-{
-name:"Fortnite",genre:"Hayatta Kalma",platform:"PC",emoji:"🏝️",developer:"Epic Games",year:"2017",mode:"Çevrim içi çok oyunculu",size:"Değişken",
-url:"https://www.fortnite.com/",
-description:`Fortnite, farklı oyun modları içeren çevrim içi bir oyun platformudur. En bilinen modlarından Battle Royale'de oyuncular bir adaya iner, ekipman toplar ve maçta sona kalmaya çalışır.
-
-Oyunda farklı karakter görünümleri, etkinlikler ve haritalar bulunur. Bazı modlarda yapı inşa etmek mümkündür; bazı modlarda ise inşa özelliği bulunmaz.
-
-Fortnite ayrıca oyuncuların hazırladığı özel deneyimlere de ev sahipliği yapar.`,
-how:`• Battle Royale
-• Sıfır İnşa modu
-• Takım hâlinde oynama
-• Farklı silah ve ekipmanlar
-• Sezonluk haritalar ve etkinlikler
-• Kullanıcı tarafından hazırlanan deneyimler
-• Karakter ve görünüm seçenekleri`,
-technical:"Platform: PC ve desteklenen diğer cihazlar\nOyuncu sayısı: Moda göre değişir\nGeliştirici: Epic Games\nÇıkış yılı: 2017\nKurulum boyutu: İçeriklere göre değişir."
-},
-{
-name:"League of Legends",genre:"Strateji",platform:"PC",emoji:"⚔️",developer:"Riot Games",year:"2009",mode:"5'e 5 çevrim içi takım oyunu",size:"Değişken",
-url:"https://www.leagueoflegends.com/",
-description:`League of Legends, iki takımın rakip üssünü yok etmeye çalıştığı çok oyunculu çevrim içi savaş arenası oyunudur.
-
-Oyuncular farklı yeteneklere sahip şampiyonlardan birini seçer. Maç boyunca altın kazanır, seviye atlar ve karakterlerini güçlendiren eşyalar satın alır.
-
-Haritada koridorlar, orman bölgeleri ve takım savaşlarının yaşandığı önemli hedefler bulunur.`,
-how:`• Çok sayıda oynanabilir şampiyon
-• 5'e 5 takım mücadeleleri
-• Dereceli ve normal maçlar
-• Şampiyon yetenekleri
-• Eşya satın alma sistemi
-• Harita hedefleri
-• Takım stratejisi ve rol paylaşımı`,
-technical:"Platform: Windows PC ve macOS\nOyuncu sayısı: Genellikle 5'e 5\nGeliştirici: Riot Games\nÇıkış yılı: 2009\nKurulum boyutu: Güncellemelerle değişir."
-},
-{
-name:"Brawlhalla",genre:"Aksiyon",platform:"PC ve Mobil",emoji:"🥊",developer:"Blue Mammoth Games",year:"2017",mode:"Çevrim içi ve yerel çok oyunculu",size:"Değişken",
-url:"https://www.brawlhalla.com/",
-description:`Brawlhalla, oyuncuların farklı savaşçılarla arenalarda mücadele ettiği ücretsiz bir platform dövüş oyunudur.
-
-Amaç rakibin hasarını artırarak onu arena dışına göndermektir. Karakterler farklı silahlar kullanabilir ve kendilerine özgü saldırı hareketlerine sahiptir.
-
-Oyun hem tek başına hem de arkadaşlarla oynanabilecek farklı modlar sunar.`,
-how:`• 1'e 1 ve 2'ye 2 karşılaşmalar
-• Her karakterin farklı silah seçenekleri
-• Çevrim içi eşleştirme
-• Yerel çok oyunculu modlar
-• Eğitim ve antrenman alanı
-• Dereceli maçlar
-• Dönemsel etkinlikler`,
-technical:"Platform: PC ve desteklenen konsol ve mobil cihazlar\nOyuncu sayısı: Moda göre değişir\nGeliştirici: Blue Mammoth Games\nÇıkış yılı: 2017"
-},
-{
-name:"Rocket League",genre:"Yarış",platform:"PC",emoji:"🚗",developer:"Psyonix",year:"2015",mode:"Çevrim içi takım oyunu",size:"Değişken",
-url:"https://www.rocketleague.com/",
-description:`Rocket League, futbol ile roket destekli arabaları birleştiren rekabetçi bir spor oyunudur.
-
-Oyuncular arabalarını kullanarak büyük bir topu rakip kaleye göndermeye çalışır. Hızlanma, zıplama ve havada hareket etme gibi mekanikler oyunun temelini oluşturur.
-
-Yeni başlayanlar için temel sürüşü öğrenmek önemlidir. İlerledikçe havada topa vurma ve takım arkadaşlarıyla paslaşma gibi teknikler geliştirilebilir.`,
-how:`• 1'e 1, 2'ye 2 ve 3'e 3 maçlar
-• Rekabetçi dereceli sistem
-• Araç özelleştirme
-• Antrenman paketleri
-• Özel oyunlar
-• Turnuvalar
-• Farklı arena tasarımları`,
-technical:"Platform: PC ve desteklenen konsollar\nOyuncu sayısı: Moda göre değişir\nGeliştirici: Psyonix\nÇıkış yılı: 2015"
-},
-{
-name:"Genshin Impact",genre:"RPG",platform:"PC ve Mobil",emoji:"🌌",developer:"HoYoverse",year:"2020",mode:"Tek oyunculu ve çevrim içi iş birliği",size:"Değişken",
-url:"https://genshin.hoyoverse.com/",
-description:`Genshin Impact, Teyvat adlı fantastik bir dünyada geçen açık dünya aksiyon rol yapma oyunudur.
-
-Oyuncu, kayıp kardeşini arayan Gezgin karakterini kontrol eder. Yolculuk sırasında farklı bölgeleri keşfeder, karakterlerle tanışır ve hikâye görevlerini tamamlar.
-
-Oyunun savaş sistemi farklı elementlerin bir arada kullanılmasına dayanır. Karakterler arasında geçiş yaparak çeşitli saldırı kombinasyonları oluşturabilirsin.`,
-how:`• Geniş açık dünya
-• Farklı element güçleri
-• Karakter geliştirme
-• Hikâye ve yan görevler
-• Keşfedilebilir bölgeler
-• Bulmacalar ve bölüm sonu düşmanları
-• Belirli içeriklerde arkadaşlarla iş birliği`,
-technical:"Platform: PC, Android, iOS ve desteklenen konsollar\nOyuncu sayısı: Tek oyunculu, belirli modlarda iş birliği\nGeliştirici: HoYoverse\nÇıkış yılı: 2020"
-},
-{
-name:"Stardew Valley",genre:"Simülasyon",platform:"PC ve Mobil",emoji:"🌾",developer:"ConcernedApe",year:"2016",mode:"Tek oyunculu ve çok oyunculu",size:"Değişken",
-url:"https://www.stardewvalley.net/",
-description:`Stardew Valley, eski bir çiftliği devralarak yeni bir hayat kurduğun çiftçilik ve yaşam simülasyonu oyunudur.
-
-Tarlalarını düzenleyebilir, ekin yetiştirebilir, hayvan bakabilir, balık tutabilir ve kasaba halkıyla arkadaşlık kurabilirsin.
-
-Mevsimler değiştikçe yetiştirilebilecek ürünler ve yapılabilecek etkinlikler de değişir. Çiftliğini tamamen kendi tercihlerin doğrultusunda geliştirebilirsin.`,
-how:`• Ekin ekme ve hasat
-• Hayvan yetiştirme
-• Balık tutma
-• Maden keşifleri
-• Kasaba halkıyla ilişkiler
-• Ev ve çiftlik geliştirme
-• Mevsimsel etkinlikler
-• Çok oyunculu çiftlik kurma`,
-technical:"Platform: PC, mobil ve desteklenen konsollar\nOyuncu sayısı: Tek veya çok oyunculu\nGeliştirici: ConcernedApe\nÇıkış yılı: 2016"
-},
-{
-name:"Terraria",genre:"Sandbox",platform:"PC ve Mobil",emoji:"⛏️",developer:"Re-Logic",year:"2011",mode:"Tek oyunculu ve çok oyunculu",size:"Değişken",
-url:"https://terraria.org/",
-description:`Terraria, iki boyutlu bir dünyada keşif, inşa, üretim ve savaş mekaniklerini bir araya getiren sandbox oyunudur.
-
-Oyuncular dünyayı keşfeder, maden kazıp kaynak toplar, ekipman üretir ve farklı düşmanlarla mücadele eder.
-
-Dünyada ormanlar, çöller, mağaralar ve başka özel bölgeler bulunur. İlerledikçe yeni ekipmanlar ve daha zorlu mücadeleler açılır.`,
-how:`• Rastgele oluşturulan dünyalar
-• Kaynak toplama ve üretim
-• Ev ve yapı inşa etme
-• Farklı biyomlar
-• Çok sayıda eşya ve silah
-• Bölüm sonu düşmanları
-• Arkadaşlarla çok oyunculu oynama`,
-technical:"Platform: PC, mobil ve desteklenen konsollar\nOyuncu sayısı: Tek veya çok oyunculu\nGeliştirici: Re-Logic\nÇıkış yılı: 2011"
-},
-{
-name:"Among Us",genre:"Strateji",platform:"PC ve Mobil",emoji:"🚀",developer:"Innersloth",year:"2018",mode:"Çevrim içi çok oyunculu",size:"Değişken",
-url:"https://www.innersloth.com/games/among-us/",
-description:`Among Us, oyuncuların uzay gemisinde görev yaptığı ve aralarındaki sahtekârları bulmaya çalıştığı sosyal çıkarım oyunudur.
-
-Mürettebat üyeleri görevlerini tamamlamaya çalışırken sahtekârlar gizlice planlarını gerçekleştirir. Şüpheli bir durum fark edildiğinde toplantı başlatılabilir.
-
-Toplantılarda oyuncular birbirleriyle konuşur, gözlemlerini paylaşır ve oylama yapar.`,
-how:`• Mürettebat ve sahtekâr rolleri
-• Görev tamamlama
-• Toplantı ve oylama sistemi
-• Farklı haritalar
-• Çevrim içi arkadaş oyunları
-• Karakter özelleştirme
-• Özel oda oluşturma`,
-technical:"Platform: PC, Android, iOS ve desteklenen konsollar\nOyuncu sayısı: Lobi ayarlarına göre değişir\nGeliştirici: Innersloth\nÇıkış yılı: 2018"
-},
-{
-name:"Subnautica",genre:"Hayatta Kalma",platform:"PC",emoji:"🌊",developer:"Unknown Worlds Entertainment",year:"2018",mode:"Tek oyunculu",size:"Değişken",
-url:"https://unknownworlds.com/subnautica/",
-description:`Subnautica, okyanuslarla kaplı yabancı bir gezegende hayatta kalmaya çalıştığın keşif ve macera oyunudur.
-
-Bir uzay gemisi kazasından sonra okyanusta tek başına kalırsın. Deniz altını keşfeder, kaynak toplar, araçlar üretir ve su altı üsleri kurarsın.
-
-Derinlere indikçe yeni canlılar, bölgeler ve hikâyenin parçalarıyla karşılaşırsın.`,
-how:`• Su altı keşifleri
-• Kaynak toplama
-• Su altı üsleri kurma
-• Denizaltı araçları
-• Ekipman üretme
-• Hikâye görevleri
-• Farklı okyanus bölgeleri`,
-technical:"Platform: PC ve desteklenen konsollar\nOyuncu sayısı: Tek oyunculu\nGeliştirici: Unknown Worlds Entertainment\nÇıkış yılı: 2018"
-},
-{
-name:"The Sims 4",genre:"Simülasyon",platform:"PC",emoji:"🏠",developer:"Maxis",year:"2014",mode:"Tek oyunculu",size:"Değişken",
-url:"https://www.ea.com/games/the-sims/the-sims-4",
-description:`The Sims 4, kendi karakterlerini oluşturduğun, evler tasarladığın ve karakterlerin günlük yaşamlarını yönettiğin yaşam simülasyonu oyunudur.
-
-Karakterlerin görünüşünü, kişilik özelliklerini ve hedeflerini belirleyebilirsin. Evler inşa edebilir, eşyaları yerleştirebilir ve karakterlerinin kariyerlerinde ilerlemesine yardımcı olabilirsin.
-
-Temel oyun ücretsiz olarak sunulabilir; ek paketler ayrıca ücretli olabilir.`,
-how:`• Karakter oluşturma
-• Ev inşa etme
-• Mobilya ve dekorasyon
-• Kariyer ve beceri geliştirme
-• Sosyal ilişkiler
-• Günlük yaşam yönetimi
-• Ek içerik paketleri`,
-technical:"Platform: PC ve desteklenen konsollar\nOyuncu sayısı: Tek oyunculu\nGeliştirici: Maxis\nÇıkış yılı: 2014\nEk paketlerin fiyatı ve içeriği değişebilir."
-},
-{
-name:"Trackmania",genre:"Yarış",platform:"PC",emoji:"🏎️",developer:"Ubisoft Nadeo",year:"2020",mode:"Tek oyunculu ve çevrim içi",size:"Değişken",
-url:"https://www.trackmania.com/",
-description:`Trackmania, oyuncuların farklı pistlerde zamana karşı yarıştığı hızlı tempolu bir yarış oyunudur.
-
-Pistlerde keskin virajlar, rampalar, zıplamalar ve farklı zemin türleri bulunur. En iyi süreyi elde etmek için doğru çizgiyi seçmek ve aracın hızını kontrol etmek gerekir.
-
-Bazı içerikler oyuncuların kendi pistlerini oluşturmasına da imkân tanır.`,
-how:`• Zamana karşı yarış
-• Farklı pist tasarımları
-• Sürüş becerisi geliştirme
-• Çevrim içi sıralamalar
-• Kullanıcı yapımı pistler
-• Kişisel rekor sistemi`,
-technical:"Platform: PC\nOyuncu sayısı: Tek oyunculu ve çevrim içi özellikler\nGeliştirici: Ubisoft Nadeo\nÇıkış yılı: 2020"
-},
-{
-name:"Unturned",genre:"Hayatta Kalma",platform:"PC",emoji:"🧟",developer:"Smartly Dressed Games",year:"2017",mode:"Tek oyunculu ve çok oyunculu",size:"Değişken",
-url:"https://store.steampowered.com/app/304930/Unturned/",
-description:`Unturned, zombi temalı bir dünyada kaynak toplayarak ve barınak kurarak hayatta kalmaya çalıştığın açık dünya oyunudur.
-
-Oyuncular yiyecek, araç gereç ve ekipman bulmak için çevreyi keşfeder. Haritalarda farklı bölgeler, yerleşimler ve tehlikeler bulunur.
-
-İstersen tek başına oynayabilir, istersen arkadaşlarınla sunuculara katılabilirsin.`,
-how:`• Kaynak toplama
-• Barınak ve üs kurma
-• Araç kullanma
-• Ekipman üretme
-• Farklı haritalar
-• Tek oyunculu ve çok oyunculu modlar
-• Topluluk tarafından hazırlanan içerikler`,
-technical:"Platform: Windows PC\nOyuncu sayısı: Tek veya çok oyunculu\nGeliştirici: Smartly Dressed Games\nÇıkış yılı: 2017"
-},
-{
-name:"Paladins",genre:"FPS",platform:"PC",emoji:"🛡️",developer:"Evil Mojo Games",year:"2018",mode:"Takım tabanlı çevrim içi",size:"Değişken",
-url:"https://www.paladins.com/",
-description:`Paladins, farklı yeteneklere sahip şampiyonlarla takım hâlinde mücadele ettiğin fantastik temalı bir takım nişancı oyunudur.
-
-Oyuncular farklı rollere sahip karakterleri seçebilir. Bazı karakterler takım arkadaşlarını korurken bazıları hasar vermeye veya destek sağlamaya odaklanır.
-
-Karakterlerin yeteneklerini ve oyun tarzlarını öğrenmek takım başarısı için önemlidir.`,
-how:`• Farklı şampiyonlar
-• Tank, hasar ve destek rolleri
-• Takım tabanlı maçlar
-• Yetenek ve kart sistemi
-• Farklı haritalar
-• Çevrim içi karşılaşmalar`,
-technical:"Platform: PC ve desteklenen platformlar\nOyuncu sayısı: Takım tabanlı\nGeliştirici: Evil Mojo Games\nÇıkış yılı: 2018\nOyunun güncel erişilebilirliğini resmî sayfadan kontrol et."
-},
-{
-name:"Warframe",genre:"Aksiyon",platform:"PC",emoji:"🤖",developer:"Digital Extremes",year:"2013",mode:"Çevrim içi iş birliği",size:"Değişken",
-url:"https://www.warframe.com/",
-description:`Warframe, bilim kurgu evreninde geçen hızlı tempolu üçüncü şahıs aksiyon oyunudur.
-
-Oyuncular Warframe adı verilen farklı zırhları kullanarak görevleri tamamlar. Her Warframe kendine özgü yeteneklere sahiptir.
-
-Görevlerden kaynaklar toplayabilir, yeni ekipmanlar üretebilir ve karakterlerini geliştirebilirsin.`,
-how:`• Farklı Warframe seçenekleri
-• Yakın dövüş ve uzak mesafe silahları
-• Hikâye görevleri
-• Ekipman üretme
-• Karakter geliştirme
-• Arkadaşlarla görev yapma
-• Geniş bilim kurgu evreni`,
-technical:"Platform: PC ve desteklenen konsollar\nOyuncu sayısı: Çevrim içi iş birliği\nGeliştirici: Digital Extremes\nÇıkış yılı: 2013"
-},
-{
-name:"Geometry Dash",genre:"Platform",platform:"PC ve Mobil",emoji:"🔷",developer:"RobTop Games",year:"2013",mode:"Tek oyunculu ve kullanıcı seviyeleri",size:"Değişken",
-url:"https://www.robtopgames.com/",
-description:`Geometry Dash, müziğin ritmine göre ilerlediğin ve engelleri doğru zamanda aşmaya çalıştığın hızlı tempolu platform oyunudur.
-
-Karakter otomatik olarak ilerler. Oyuncunun zıplama ve diğer hareketleri doğru zamanda yapması gerekir.
-
-Oyunun seviye oluşturma sistemi sayesinde oyuncular kendi bölümlerini hazırlayabilir ve topluluk tarafından oluşturulan seviyeleri deneyebilir.`,
-how:`• Ritme dayalı platform bölümleri
-• Farklı oyun modları
-• Seviye oluşturma aracı
-• Kullanıcı yapımı bölümler
-• Karakter özelleştirme
-• Zamanlama ve refleks odaklı oynanış`,
-technical:"Platform: PC ve mobil\nOyuncu sayısı: Tek oyunculu temel oynanış\nGeliştirici: RobTop Games\nÇıkış yılı: 2013"
-},
-{
-name:"Hill Climb Racing",genre:"Yarış",platform:"Mobil",emoji:"🚙",developer:"Fingersoft",year:"2012",mode:"Tek oyunculu",size:"Değişken",
-url:"https://www.fingersoft.com/games/hill-climb-racing/",
-description:`Hill Climb Racing, farklı araçlarla engebeli arazilerde ilerlemeye çalıştığın fizik tabanlı yarış oyunudur.
-
-Oyuncu gaz ve fren kontrollerini kullanarak aracın dengesini korur. Yolda ilerledikçe para toplayabilir ve yeni araçlar açabilir.
-
-Her aracın sürüş özellikleri farklıdır. Araçları geliştirmek daha uzun mesafeler gitmene yardımcı olabilir.`,
-how:`• Farklı araç seçenekleri
-• Birbirinden farklı haritalar
-• Araç geliştirme sistemi
-• Fizik tabanlı sürüş
-• Yakıt yönetimi
-• Mesafe ve rekor sistemi`,
-technical:"Platform: Android, iOS ve desteklenen diğer sürümler\nOyuncu sayısı: Tek oyunculu\nGeliştirici: Fingersoft\nÇıkış yılı: 2012"
-},
-{
-name:"Hollow Knight",genre:"Macera",platform:"PC",emoji:"🐞",developer:"Team Cherry",year:"2017",mode:"Tek oyunculu",size:"Değişken",
-url:"https://www.hollowknight.com/",
-description:`Hollow Knight, Hallownest isimli gizemli bir yeraltı krallığında geçen keşif ve aksiyon oyunudur.
-
-Oyuncu küçük bir şövalyeyi kontrol ederek birbirine bağlı bölgeleri keşfeder. Yolculuk sırasında yeni yetenekler kazanabilir, gizli alanlar bulabilir ve güçlü düşmanlarla karşılaşabilirsin.
-
-Oyunun dünyası el çizimi görselleri, atmosferik müzikleri ve keşif odaklı yapısıyla öne çıkar.`,
-how:`• Geniş ve birbirine bağlı haritalar
-• Keşfedilebilir gizli bölgeler
-• Yeni yetenekler
-• Farklı düşmanlar
-• Zorlu bölüm sonu mücadeleleri
-• Harita ve keşif sistemi
-• Tek oyunculu macera`,
-technical:"Platform: PC ve desteklenen konsollar\nOyuncu sayısı: Tek oyunculu\nGeliştirici: Team Cherry\nÇıkış yılı: 2017"
-},
-{
-name:"Cuphead",genre:"Aksiyon",platform:"PC",emoji:"☕",developer:"Studio MDHR",year:"2017",mode:"Tek oyunculu ve yerel iki oyunculu",size:"Değişken",
-url:"https://www.cupheadgame.com/",
-description:`Cuphead, 1930'ların çizgi filmlerinden esinlenen görsel tasarıma sahip aksiyon ve platform oyunudur.
-
-Cuphead ve Mugman karakterleriyle farklı düşmanlara karşı mücadele edersin. Oyunun önemli bir bölümü bölüm sonu savaşlarından oluşur.
-
-Düşmanların hareketlerini öğrenmek, saldırılardan kaçınmak ve doğru zamanda karşılık vermek gerekir.`,
-how:`• El çizimi animasyon tarzı
-• Farklı bölüm sonu düşmanları
-• Silah ve yetenek seçenekleri
-• Platform bölümleri
-• Yerel iki oyunculu mod
-• Müzik ve görsel tasarım`,
-technical:"Platform: PC ve desteklenen konsollar\nOyuncu sayısı: Tek veya yerel iki oyunculu\nGeliştirici: Studio MDHR\nÇıkış yılı: 2017"
-}
+const games = [
+["VALORANT","FPS","PC","🎯",2020,"https://playvalorant.com/","5'e 5 taktiksel nişancı oyunu. Ajanların özel yeteneklerini kullanarak takımınla raundları kazanmaya çalışırsın."],
+["Counter-Strike 2","FPS","PC","🔫",2023,"https://www.counter-strike.net/cs2","Teröristler ve karşı teröristlerin mücadele ettiği rekabetçi takım nişancı oyunu. Aim, strateji ve takım çalışması önemlidir."],
+["Fortnite","Aksiyon","PC ve Konsol","🪂",2017,"https://www.fortnite.com/","Battle Royale modunda diğer oyuncularla mücadele edebilir, inşa yapabilir ve farklı oyun modlarını deneyebilirsin."],
+["Roblox","Simülasyon","PC ve Mobil","🧱",2006,"https://www.roblox.com/","Oyuncuların kendi oyunlarını oluşturabildiği ve başkalarının hazırladığı binlerce deneyimi oynayabildiği platform."],
+["Minecraft","Hayatta Kalma","PC ve Mobil","⛏️",2011,"https://www.minecraft.net/","Bloklardan oluşan dünyada inşa yapabilir, keşfe çıkabilir ve hayatta kalma modunda kaynak toplayabilirsin."],
+["Brawlhalla","Aksiyon","PC ve Konsol","🥊",2017,"https://www.brawlhalla.com/","Farklı karakterlerle arenalarda mücadele ettiğin ücretsiz platform dövüş oyunu."],
+["Rocket League","Yarış","PC ve Konsol","🚗",2015,"https://www.rocketleague.com/","Arabalarla futbol oynadığın hızlı ve rekabetçi çok oyunculu oyun."],
+["League of Legends","Strateji","PC","⚔️",2009,"https://www.leagueoflegends.com/","İki takımın rakip üssünü yok etmeye çalıştığı, karakter yeteneklerine dayalı MOBA oyunu."],
+["Teamfight Tactics","Strateji","PC ve Mobil","♟️",2019,"https://teamfighttactics.leagueoflegends.com/","Şampiyonları seçip takımını kurduğun, rakiplerine karşı otomatik savaşlar yaptığın strateji oyunu."],
+["Paladins","FPS","PC ve Konsol","🛡️",2018,"https://store.steampowered.com/app/444090/Paladins/","Farklı yeteneklere sahip şampiyonlarla takım tabanlı nişancı karşılaşmalarına katılırsın."],
+["Warframe","Aksiyon","PC ve Konsol","🤖",2013,"https://www.warframe.com/","Bilim kurgu evreninde görevler yaptığın, karakterini ve ekipmanlarını geliştirdiğin çevrim içi aksiyon oyunu."],
+["The Sims 4","Simülasyon","PC ve Konsol","🏡",2014,"https://www.ea.com/games/the-sims/the-sims-4","Karakterler oluşturup evler tasarladığın ve onların günlük yaşamlarını yönettiğin yaşam simülasyonu."],
+["Trackmania","Yarış","PC","🏎️",2020,"https://www.trackmania.com/","Zorlu parkurlarda en iyi zamanı yapmaya çalıştığın hızlı tempolu yarış oyunu."],
+["Unturned","Hayatta Kalma","PC","🧟",2017,"https://store.steampowered.com/app/304930/Unturned/","Zombi temalı dünyada kaynak toplayıp barınak kurduğun ve hayatta kalmaya çalıştığın oyun."],
+["Apex Legends","FPS","PC ve Konsol","🚀",2019,"https://www.ea.com/games/apex-legends","Özel yeteneklere sahip karakterlerle takım hâlinde mücadele ettiğin Battle Royale nişancı oyunu."],
+["Genshin Impact","RPG","PC ve Mobil","🌄",2020,"https://genshin.hoyoverse.com/","Geniş bir fantastik dünyayı keşfettiğin, farklı karakterlerle savaştığın açık dünya rol yapma oyunu."],
+["Honkai: Star Rail","RPG","PC ve Mobil","🚆",2023,"https://hsr.hoyoverse.com/","Uzay yolculuğu temalı, sıra tabanlı savaşlar ve hikâye görevleri içeren rol yapma oyunu."],
+["Fall Guys","Platform","PC ve Konsol","🍬",2020,"https://www.fallguys.com/","Renkli engelli parkurlarda diğer oyuncularla yarıştığın eğlenceli çok oyunculu oyun."],
+["Stumble Guys","Platform","PC ve Mobil","🏃",2021,"https://www.stumbleguys.com/","Engelleri aşarak turun sonuna ulaşmaya çalıştığın çok oyunculu yarış oyunu."],
+["Portal 2","Bulmaca","PC","🌀",2011,"https://store.steampowered.com/app/620/Portal_2/","Portallar oluşturarak fizik tabanlı bulmacaları çözdüğün, tek veya iki kişi oynanabilen macera."],
+["Hollow Knight","Aksiyon","PC","🐞",2017,"https://www.hollowknight.com/","Gizemli bir yeraltı krallığını keşfettiğin, zorlu düşmanlar ve keşif alanları içeren macera."],
+["Celeste","Platform","PC","🏔️",2018,"https://www.celestegame.com/","Madeline ile Celeste Dağı'na tırmandığın, hassas hareketler gerektiren zorlu platform oyunu."],
+["Slime Rancher","Simülasyon","PC","🟢",2017,"https://www.slimerancher.com/","Uzak bir gezegende slime topladığın, beslediğin ve kendi çiftliğini geliştirdiğin oyun."],
+["Human: Fall Flat","Bulmaca","PC ve Konsol","🧍",2016,"https://www.humanfallflat.com/","Komik fizik hareketleriyle nesneleri kullanıp bulmacaları çözdüğün platform oyunu."],
+["Bloons TD 6","Strateji","PC ve Mobil","🎈",2018,"https://www.ninjakiwi.com/","Maymun kuleleri yerleştirerek balonların ilerlemesini engellediğin kule savunma oyunu."],
+["Plants vs. Zombies","Strateji","PC ve Mobil","🌻",2009,"https://www.ea.com/games/plants-vs-zombies","Bahçeni korumak için farklı özelliklere sahip bitkileri yerleştirdiğin strateji oyunu."],
+["Geometry Dash","Platform","PC ve Mobil","🔷",2013,"https://www.robtopgames.com/","Müziğin ritmine göre engelleri aştığın ve kendi seviyelerini oluşturabildiğin platform oyunu."],
+["Don't Starve Together","Hayatta Kalma","PC","🔥",2016,"https://www.klei.com/games/dont-starve-together","Arkadaşlarınla kaynak toplayıp barınak kurduğun, zorlu bir dünyada hayatta kalma oyunu."],
+["PowerWash Simulator","Simülasyon","PC","🧽",2022,"https://www.futurlab.co.uk/","Basınçlı su kullanarak farklı nesneleri ve alanları temizlediğin rahatlatıcı simülasyon."],
+["Euro Truck Simulator 2","Simülasyon","PC","🚛",2012,"https://eurotrucksimulator2.com/","Avrupa şehirleri arasında yük taşıdığın ve kendi nakliye şirketini geliştirdiğin kamyon simülasyonu."],
+["Stardew Valley","Simülasyon","PC ve Mobil","🌾",2016,"https://www.stardewvalley.net/","Çiftlik kurduğun, ekin yetiştirdiğin, balık tuttuğun ve kasabayı keşfettiğin yaşam oyunu."],
+["Terraria","Hayatta Kalma","PC ve Mobil","⛏️",2011,"https://terraria.org/","2D dünyada keşif yaptığın, kaynak topladığın, inşa ettiğin ve düşmanlarla mücadele ettiğin oyun."],
+["Among Us","Aksiyon","PC ve Mobil","🚀",2018,"https://www.innersloth.com/games/among-us/","Mürettebatın görevleri tamamlamaya çalıştığı, aralarındaki sahtekârı bulmaya dayalı sosyal oyun."],
+["The Forest","Hayatta Kalma","PC","🌲",2018,"https://endnightgames.com/","Bir ormanda hayatta kalmaya çalıştığın, barınak kurduğun ve çevreyi keşfettiğin macera."],
+["Dead Cells","Aksiyon","PC","⚔️",2018,"https://dead-cells.com/","Hızlı savaşlar, farklı silahlar ve tekrar oynanabilir bölümler içeren aksiyon platform oyunu."],
+["Cuphead","Aksiyon","PC","☕",2017,"https://www.cupheadgame.com/","El çizimi çizgi film tarzı görseller ve zorlu bölüm sonu mücadeleleri sunan aksiyon oyunu."],
+["Hades","Aksiyon","PC","🏛️",2020,"https://www.supergiantgames.com/games/hades/","Zagreus ile yeraltı dünyasından çıkmaya çalıştığın, hızlı savaşlar içeren aksiyon oyunu."],
+["Left 4 Dead 2","FPS","PC","🧟",2009,"https://store.steampowered.com/app/550/Left_4_Dead_2/","Arkadaşlarınla birlikte bölümleri geçmeye çalıştığın takım tabanlı zombi temalı nişancı oyunu."],
+["Team Fortress 2","FPS","PC","🎩",2007,"https://www.teamfortress.com/","Farklı sınıflara sahip karakterlerle takım hâlinde mücadele ettiğin çok oyunculu nişancı oyunu."],
+["Dota 2","Strateji","PC","🧙",2013,"https://www.dota2.com/","Kahraman seçerek takımınla rakip üssünü yok etmeye çalıştığın rekabetçi MOBA oyunu."],
+["PUBG: Battlegrounds","Hayatta Kalma","PC ve Konsol","🪂",2017,"https://pubg.com/","Haritaya inip ekipman topladığın ve maçta sona kalmaya çalıştığın Battle Royale oyunu."],
+["Overwatch 2","FPS","PC ve Konsol","🦸",2023,"https://overwatch.blizzard.com/","Farklı yeteneklere sahip kahramanlarla takım hâlinde mücadele ettiğin nişancı oyunu."],
+["Destiny 2","FPS","PC ve Konsol","🚀",2017,"https://www.destinythegame.com/","Bilim kurgu evreninde görevler yaptığın, ekipman topladığın ve karakterini geliştirdiğin oyun."],
+["War Thunder","Simülasyon","PC ve Konsol","✈️",2013,"https://warthunder.com/","Hava, kara ve deniz araçlarıyla çevrim içi karşılaşmalara katıldığın araç simülasyonu."],
+["World of Tanks","Aksiyon","PC","🚜",2010,"https://worldoftanks.com/","Farklı tanklarla takım tabanlı karşılaşmalara katıldığın çevrim içi araç oyunu."],
+["World of Warships","Aksiyon","PC","🚢",2015,"https://worldofwarships.com/","Savaş gemileriyle deniz haritalarında takım karşılaşmalarına katıldığın oyun."],
+["Path of Exile","RPG","PC","💎",2013,"https://www.pathofexile.com/","Karanlık bir dünyada karakterini geliştirdiğin, eşya topladığın ve canavarlarla savaştığın RPG."],
+["Albion Online","RPG","PC ve Mobil","🛡️",2017,"https://albiononline.com/","Açık dünyada üretim, ticaret, keşif ve grup etkinlikleri yapabildiğin çevrim içi RPG."],
+["RuneScape","RPG","PC","🧙",2001,"https://www.runescape.com/","Görevler yaptığın, beceriler geliştirdiğin ve geniş bir fantastik dünyayı keşfettiğin RPG."],
+["EVE Online","Simülasyon","PC","🌌",2003,"https://www.eveonline.com/","Uzay gemileri kullandığın, ticaret yaptığın ve oyuncu topluluklarına katıldığın uzay simülasyonu."],
+["Hearthstone","Strateji","PC ve Mobil","🃏",2014,"https://hearthstone.blizzard.com/","Kart desteleri hazırlayıp sıra tabanlı strateji karşılaşmalarına katıldığın dijital kart oyunu."],
+["Marvel Snap","Strateji","PC ve Mobil","🃏",2022,"https://www.marvelsnap.com/","Marvel karakterlerinin kartlarını kullanarak kısa strateji maçları yaptığın kart oyunu."],
+["Yu-Gi-Oh! Master Duel","Strateji","PC ve Mobil","🐉",2022,"https://www.konami.com/yugioh/masterduel/","Kart desteleri hazırlayarak çevrim içi düellolar yaptığın dijital kart oyunu."],
+["Palia","Simülasyon","PC","🏡",2023,"https://palia.com/","Ev tasarladığın, balık tuttuğun, bahçecilik yaptığın ve arkadaşlarınla keşfe çıktığın yaşam oyunu."],
+["Star Trek Online","RPG","PC","🛸",2010,"https://www.playstartrekonline.com/","Star Trek evreninde kaptan oluşturup uzay görevlerine katıldığın çevrim içi RPG."],
+["Smite 2","Aksiyon","PC ve Konsol","⚡",2024,"https://www.smite2.com/","Mitolojik karakterlerle üçüncü şahıs kamera açısından takım mücadelelerine katıldığın MOBA."],
+["Wuthering Waves","RPG","PC ve Mobil","🌊",2024,"https://wutheringwaves.kurogames.com/","Geniş bir dünyayı keşfettiğin, farklı karakterlerle hızlı savaşlara katıldığın RPG."],
+["Zenless Zone Zero","Aksiyon","PC ve Mobil","🏙️",2024,"https://zenless.hoyoverse.com/","Farklı karakterlerle hızlı ve hareketli savaşlara katıldığın şehir temalı aksiyon oyunu."],
+["Limbo","Bulmaca","PC","🌑",2010,"https://playdead.com/games/limbo/","Karanlık atmosferli bir dünyada çevresel bulmacaları çözerek ilerlediğin platform macerası."],
+["Inside","Bulmaca","PC","👁️",2016,"https://playdead.com/games/inside/","Gizemli bir dünyada çevreyi keşfettiğin ve bulmacaları çözerek ilerlediğin macera oyunu."],
+["Ori and the Blind Forest","Platform","PC","🌳",2015,"https://www.orithegame.com/","Ori ile büyülü bir ormanı keşfettiğin, platform ve macera öğeleri içeren oyun."],
+["Ori and the Will of the Wisps","Platform","PC","✨",2020,"https://www.orithegame.com/","Ori'nin yeni macerasında keşif, platform bölümleri ve hareketli mücadeleler seni bekliyor."],
+["Vampire Survivors","Aksiyon","PC ve Mobil","🧛",2022,"https://poncle.games/","Ekrana gelen düşman dalgalarına karşı otomatik saldırılar ve yetenek geliştirmeleri kullandığın oyun."],
+["Brotato","Aksiyon","PC","🥔",2023,"https://store.steampowered.com/app/1942280/Brotato/","Bir patates karakterini kontrol ederek düşman dalgalarına karşı hayatta kalmaya çalıştığın oyun."],
+["Enter the Gungeon","Aksiyon","PC","🔫",2016,"https://dodgeroll.com/gungeon/","Silahlarla dolu zindanları keşfettiğin ve bölüm sonu mücadelelerine katıldığın aksiyon oyunu."],
+["Risk of Rain 2","Aksiyon","PC","🌧️",2020,"https://www.riskofrain.com/","Farklı karakterlerle uzaylı gezegenlerde düşmanlara karşı mücadele ettiğin aksiyon oyunu."],
+["Valheim","Hayatta Kalma","PC","🪓",2021,"https://www.valheimgame.com/","Viking temalı bir dünyada kaynak topladığın, üs kurduğun ve keşif yaptığın hayatta kalma oyunu."],
+["Raft","Hayatta Kalma","PC","🛶",2022,"https://raft-game.com/","Okyanusun ortasında salını geliştirerek kaynak topladığın ve adaları keşfettiğin hayatta kalma oyunu."],
+["Project Zomboid","Hayatta Kalma","PC","🧟",2013,"https://projectzomboid.com/","Zorlu bir dünyada kaynak ve barınak yönetimi yaparak hayatta kalmaya çalıştığın oyun."],
+["The Long Dark","Hayatta Kalma","PC","❄️",2017,"https://www.thelongdark.com/","Soğuk bir vahşi doğada kaynaklarını yöneterek hayatta kalmaya çalıştığın keşif oyunu."]
 ];
 
-let selectedGame=null;
+const grid=document.getElementById("games");
+const search=document.getElementById("search");
+const count=document.getElementById("count");
+const empty=document.getElementById("empty");
+let activeFilter="Hepsi";
 
-function renderGames(){
- const query=document.getElementById("search").value.trim().toLocaleLowerCase("tr");
- const platform=document.getElementById("platform").value;
- const genre=document.getElementById("genre").value;
- const box=document.getElementById("games");
- box.innerHTML="";
-
+function render(){
+ const term=search.value.toLocaleLowerCase("tr");
  const filtered=games.filter(g=>
-  g.name.toLocaleLowerCase("tr").includes(query) &&
-  (platform==="Hepsi" || g.platform===platform || (platform==="PC" && g.platform==="PC ve Mobil") || (platform==="Mobil" && g.platform==="PC ve Mobil")) &&
-  (genre==="Hepsi" || g.genre===genre)
+  (activeFilter==="Hepsi"||g[1]===activeFilter)&&
+  (g[0].toLocaleLowerCase("tr").includes(term)||g[1].toLocaleLowerCase("tr").includes(term))
  );
-
- if(!filtered.length){
-  box.innerHTML='<div class="empty">Aradığın oyun bulunamadı. 😕</div>';
-  return;
- }
-
- filtered.forEach(g=>{
+ grid.innerHTML="";
+ count.textContent=filtered.length+" / "+games.length+" OYUN";
+ empty.style.display=filtered.length?"none":"block";
+ filtered.forEach((g)=>{
   const card=document.createElement("article");
   card.className="card";
-  const cover=document.createElement("div");
-  cover.className="cover";
-  cover.textContent=g.emoji;
-  const info=document.createElement("div");
-  info.className="info";
-  const h=document.createElement("h3");
-  h.textContent=g.name;
-  const tag=document.createElement("span");
-  tag.className="tag";
-  tag.textContent=g.genre;
-  const plat=document.createElement("span");
-  plat.className="platform";
-  plat.textContent=g.platform;
-  const p=document.createElement("p");
-  p.textContent=g.description.slice(0,125)+"...";
-  info.append(h,tag,plat,p);
-  card.append(cover,info);
-  card.addEventListener("click",()=>openModal(g));
-  box.appendChild(card);
+  card.innerHTML=`
+   <div class="cover"><span class="emoji">${g[3]}</span></div>
+   <div class="cardbody">
+    <h3>${g[0]}</h3>
+    <div class="meta">${g[2]} · ${g[4]}</div>
+    <span class="tag">${g[1]}</span>
+   </div>`;
+  card.addEventListener("click",()=>openGame(g,card));
+  grid.appendChild(card);
+  loadCover(g,card.querySelector(".cover"));
  });
 }
 
-function openModal(g){
- selectedGame=g.name;
- document.getElementById("detailEmoji").textContent=g.emoji;
- document.getElementById("detailName").textContent=g.name;
- document.getElementById("detailMeta").textContent=
-  "Tür: "+g.genre+" • Platform: "+g.platform+" • Geliştirici: "+g.developer+" • Çıkış: "+g.year+" • Oynanış: "+g.mode;
- document.getElementById("detailDescription").textContent=g.description;
- document.getElementById("detailHow").textContent=g.how;
- document.getElementById("detailTechnical").textContent=g.technical+"\nKurulum boyutu: "+g.size;
- const link=document.getElementById("download");
- link.href=g.url;
- document.getElementById("commentInput").value="";
- showComments();
- document.getElementById("modal").style.display="block";
- document.body.style.overflow="hidden";
-}
-
-function closeModal(){
- document.getElementById("modal").style.display="none";
- document.body.style.overflow="";
- selectedGame=null;
-}
-
-function readComments(){
- try{return JSON.parse(localStorage.getItem("oyunRehberiYorumlari")||"{}")}
- catch(e){return {}}
-}
-
-function showComments(){
- const box=document.getElementById("comments");
- box.innerHTML="";
- const data=readComments();
- const list=data[selectedGame]||[];
- if(!list.length){
-  const p=document.createElement("p");
-  p.className="meta";
-  p.textContent="Henüz yorum yok. İlk yorumu sen yaz!";
-  box.appendChild(p);
+const coverCache={};
+async function loadCover(g,element){
+ const title=g[0];
+ if(coverCache[title]===null)return;
+ if(coverCache[title]){
+  element.innerHTML=`<img loading="lazy" src="${coverCache[title]}" alt="${title} kapak görseli">`;
   return;
  }
- list.forEach(comment=>{
-  const div=document.createElement("div");
-  div.className="comment";
-  div.textContent="💬 "+comment;
-  box.appendChild(div);
- });
-}
-
-function addComment(){
- const input=document.getElementById("commentInput");
- const value=input.value.trim();
- if(!value || !selectedGame)return;
- const data=readComments();
- if(!Array.isArray(data[selectedGame]))data[selectedGame]=[];
- data[selectedGame].push(value.slice(0,500));
  try{
-  localStorage.setItem("oyunRehberiYorumlari",JSON.stringify(data));
-  input.value="";
-  showComments();
- }catch(e){
-  alert("Yorum kaydedilemedi. Tarayıcı depolama alanını kontrol et.");
- }
+  const url="https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch="+encodeURIComponent(title)+"&gsrnamespace=0&gsrlimit=1&prop=pageimages&piprop=thumbnail&pithumbsize=500&format=json&origin=*";
+  const response=await fetch(url);
+  const data=await response.json();
+  const pages=data.query?.pages;
+  const page=pages?Object.values(pages)[0]:null;
+  const image=page?.thumbnail?.source;
+  if(image){
+   coverCache[title]=image;
+   if(element.isConnected)element.innerHTML=`<img loading="lazy" src="${image}" alt="${title} kapak görseli">`;
+  }else coverCache[title]=null;
+ }catch(error){coverCache[title]=null;}
 }
 
-document.getElementById("search").addEventListener("input",renderGames);
-document.getElementById("platform").addEventListener("change",renderGames);
-document.getElementById("genre").addEventListener("change",renderGames);
+function openGame(g,card){
+ const modal=document.getElementById("modal");
+ document.getElementById("modalname").textContent=g[0];
+ document.getElementById("modalmeta").textContent=g[1]+" · "+g[2]+" · "+g[4];
+ document.getElementById("modaldesc").textContent=g[6];
+ document.getElementById("modalinfo").innerHTML=
+  "<b>Tür:</b> "+g[1]+"<br><b>Platform:</b> "+g[2]+"<br><b>Çıkış yılı:</b> "+g[4]+"<br><b>Oyun sayısı:</b> "+games.length;
+ const cover=document.getElementById("modalcover");
+ cover.innerHTML="<span>"+g[3]+"</span>";
+ if(coverCache[g[0]])cover.innerHTML=`<img src="${coverCache[g[0]]}" alt="${g[0]}">`;
+ document.getElementById("play").href=g[5];
+ modal.classList.add("show");
+}
+document.getElementById("close").onclick=()=>document.getElementById("modal").classList.remove("show");
 document.getElementById("modal").addEventListener("click",e=>{
- if(e.target.id==="modal")closeModal();
+ if(e.target.id==="modal")e.currentTarget.classList.remove("show");
 });
 document.addEventListener("keydown",e=>{
- if(e.key==="Escape")closeModal();
+ if(e.key==="Escape")document.getElementById("modal").classList.remove("show");
 });
-
-renderGames();
+search.addEventListener("input",render);
+document.getElementById("filters").addEventListener("click",e=>{
+ if(e.target.tagName!=="BUTTON")return;
+ document.querySelectorAll(".filters button").forEach(b=>b.classList.remove("active"));
+ e.target.classList.add("active");
+ activeFilter=e.target.dataset.filter;
+ render();
+});
+render();
 </script>
- 
-<script>
-const coverTitles = {
-  "VALORANT": "Valorant",
-  "Counter-Strike 2": "Counter-Strike 2",
-  "League of Legends": "League of Legends",
-  "The Sims 4": "The Sims 4"
-};
-
-const coverCache = {};
-
-async function addGameCovers() {
-  document.querySelectorAll("#games .card").forEach(async card => {
-    if (card.dataset.coverChecked) return;
-    card.dataset.coverChecked = "yes";
-
-    const name = card.querySelector("h3")?.textContent;
-    const cover = card.querySelector(".cover");
-    if (!name || !cover) return;
-
-    const title = coverTitles[name] || name;
-
-    try {
-      let url = coverCache[title];
-
-      if (!url) {
-        const api =
-          "https://en.wikipedia.org/w/api.php?action=query&titles=" +
-          encodeURIComponent(title) +
-          "&prop=pageimages&format=json&pithumbsize=600&origin=*";
-
-        const response = await fetch(api);
-        const data = await response.json();
-        const pages = data.query.pages;
-        const page = Object.values(pages)[0];
-
-        url = page?.thumbnail?.source;
-        if (url) coverCache[title] = url;
-      }
-
-      if (!url || !cover.isConnected) return;
-
-      const img = document.createElement("img");
-      img.src = url;
-      img.alt = title + " oyun kapağı";
-      img.style.cssText =
-        "width:100%;height:100%;object-fit:cover;display:block";
-
-      img.onload = () => {
-        cover.textContent = "";
-        cover.style.padding = "0";
-        cover.appendChild(img);
-      };
-    } catch (error) {
-      console.log("Kapak yüklenemedi:", title);
-    }
-  });
-}
-
-new MutationObserver(addGameCovers).observe(
-  document.getElementById("games"),
-  { childList: true }
-);
-
-addGameCovers();
-</script>
-
 </body>
 </html>
