@@ -26,7 +26,6 @@ button:hover{background:#0872d2}
 .tag{display:inline-block;background:#18385b;padding:5px 8px;border-radius:6px;font-size:12px}
 .game button{margin-top:auto}
 .news-card{display:flex;flex-direction:column}
-.news-card img{width:100%;height:175px;object-fit:cover;background:#091426}
 .no-image{height:100px;display:flex;align-items:center;justify-content:center;background:#0b1729;color:#9aabc4}
 .news-content{padding:15px;display:flex;flex-direction:column;gap:10px;flex:1}
 .news-content p{color:#c0cce0;font-size:14px;line-height:1.5}
@@ -79,7 +78,7 @@ Mature, Adults Only, yaş derecesi bilinmeyen ve engelli listedeki oyunlar gizle
 
 <section id="news" style="display:none">
 <h2>📰 Türkçe Oyun Haberleri</h2>
-<p class="muted">Listedeki oyunlar için haberler aranır.</p>
+<p class="muted">Listedeki oyunlar için Türkçe haber arama bağlantıları.</p>
 <div class="controls">
 <button onclick="loadNews()">↻ Haberleri yenile</button>
 </div>
@@ -194,169 +193,37 @@ function closeModal(){
 document.getElementById("modal").style.display="none";
 }
 
+let newsLoaded=false;
+
 function showTab(tab){
 document.getElementById("games").style.display=tab==="games"?"block":"none";
 document.getElementById("news").style.display=tab==="news"?"block":"none";
 if(tab==="news"&&!newsLoaded)loadNews();
 }
 
-/* Her oyun için Bing RSS araması */
-const newsQueries=safeGames.map(g=>({
-game:g.name,
-query:g.name
-}));
+function loadNews(){
+const grid=document.getElementById("newsGrid");
+const status=document.getElementById("newsStatus");
 
-const blockedNewsWords=[
-"hentai","porn","nsfw","nudity","nude","erotic",
-"adult content","18+","çıplak","müstehcen","cinsel içerik"
-];
-
-function isSafeNews(title,description){
-const text=(title+" "+description).toLowerCase();
-return !blockedNewsWords.some(w=>text.includes(w));
-}
-
-function nodeText(item,tag){
-const node=item.getElementsByTagName(tag)[0];
-return node?node.textContent.trim():"";
-}
-
-function findImage(item){
-const tags=["media:thumbnail","media:content","enclosure"];
-for(const tag of tags){
-const node=item.getElementsByTagName(tag)[0];
-if(node){
-const url=node.getAttribute("url")||node.getAttribute("href");
-if(url)return url;
-}
-}
-return "";
-}
-
-function proxyURL(url){
-return "https://proxy.cors.dev/"+url;
-}
-
-async function fetchFeed(feed){
-const bingURL=
-"https://www.bing.com/news/search?q="+
-encodeURIComponent(feed.query)+
-"&format=rss&setmkt=tr-TR";
-
-const response=await fetch(proxyURL(bingURL));
-if(!response.ok)throw new Error("Haber kaynağı açılamadı");
-
-const xmlText=await response.text();
-const xml=new DOMParser().parseFromString(xmlText,"text/xml");
-
-if(xml.querySelector("parsererror"))throw new Error("RSS okunamadı");
-
-return [...xml.querySelectorAll("item")].slice(0,5).map(item=>({
-game:feed.game,
-title:nodeText(item,"title"),
-link:nodeText(item,"link"),
-date:nodeText(item,"pubDate"),
-description:nodeText(item,"description"),
-image:findImage(item)
-}));
-}
-
-function formatDate(date){
-const d=new Date(date);
-if(Number.isNaN(d.getTime()))return "Tarih belirtilmemiş";
-return d.toLocaleDateString("tr-TR",{
-day:"numeric",month:"long",year:"numeric"
-});
-}
-
-let newsLoaded=false;
-let newsLoading=false;
-
-function wait(ms){
-return new Promise(resolve=>setTimeout(resolve,ms));
-}
-
-async function loadNews(){
-if(newsLoading)return;
-
-newsLoading=true;
 newsLoaded=true;
 
-const status=document.getElementById("newsStatus");
-const grid=document.getElementById("newsGrid");
+grid.innerHTML=safeGames.map(g=>{
+const url="https://www.bing.com/news/search?q="+
+encodeURIComponent(g.name)+"&setmkt=tr-TR";
 
-status.textContent="44 oyun için Türkçe haberler aranıyor...";
-grid.innerHTML="";
-
-let all=[];
-let failed=0;
-
-try{
-/* Dört oyunluk küçük gruplar halinde arama yap */
-for(let i=0;i<newsQueries.length;i+=4){
-const batch=newsQueries.slice(i,i+4);
-const results=await Promise.allSettled(batch.map(fetchFeed));
-
-results.forEach(result=>{
-if(result.status==="fulfilled"){
-all.push(...result.value);
-}else{
-failed++;
-}
-});
-
-status.textContent=
-Math.min(i+4,newsQueries.length)+
-"/"+newsQueries.length+" oyun kontrol edildi...";
-
-if(i+4<newsQueries.length){
-await wait(1200);
-}
-}
-
-all=all.filter(n=>
-n.title&&n.link&&isSafeNews(n.title,n.description)
-);
-
-const unique=new Map();
-all.forEach(n=>{
-if(!unique.has(n.link))unique.set(n.link,n);
-});
-
-all=[...unique.values()].sort((a,b)=>
-new Date(b.date||0)-new Date(a.date||0)
-).slice(0,60);
-
-if(!all.length){
-status.textContent=
-"Şu anda haber bulunamadı. Biraz sonra tekrar deneyebilirsin. Başarısız arama: "+failed;
-newsLoading=false;
-return;
-}
-
-status.textContent=
-all.length+" haber bulundu. Başarısız oyun araması: "+failed;
-
-grid.innerHTML=all.map(n=>`
+return `
 <article class="news-card">
-${
-n.image
-? `<img src="${escapeHTML(n.image)}" alt="${escapeHTML(n.title)}" loading="lazy" onerror="this.outerHTML='<div class=no-image>Görsel bulunamadı</div>'">`
-: `<div class="no-image">📰 Haber</div>`
-}
+<div class="no-image">📰 ${escapeHTML(g.name)}</div>
 <div class="news-content">
-<span class="tag">${escapeHTML(n.game)}</span>
-<h3>${escapeHTML(n.title)}</h3>
-<span class="meta">${escapeHTML(formatDate(n.date))}</span>
-<a href="${escapeHTML(n.link)}" target="_blank" rel="noopener noreferrer">Haberi Oku →</a>
+<span class="tag">${escapeHTML(g.name)}</span>
+<h3>${escapeHTML(g.name)} Haberleri</h3>
+<p>Bu oyunla ilgili Türkçe haberleri ve güncel gelişmeleri ara.</p>
+<a href="${url}" target="_blank" rel="noopener noreferrer">Türkçe Haberleri Gör →</a>
 </div>
-</article>`).join("");
+</article>`;
+}).join("");
 
-}catch(error){
-status.textContent="Haberler yüklenirken bir hata oluştu: "+error.message;
-}
-
-newsLoading=false;
+status.textContent=safeGames.length+" oyun için Türkçe haber arama bağlantısı hazır.";
 }
 
 render();
