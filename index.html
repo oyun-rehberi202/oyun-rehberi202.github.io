@@ -35,13 +35,14 @@ button:hover{background:#0872d2}
 .modalbox{background:#111c30;border:1px solid #315477;border-radius:14px;padding:22px;max-width:550px;width:100%;max-height:85vh;overflow:auto}
 .close{float:right;background:#34465f}
 footer{text-align:center;color:#71839c;padding:30px}
+.status-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin:12px 0}
+.status-item{padding:8px;background:#0b1729;border-radius:6px;font-size:13px}
 details{background:#111c30;padding:14px;border-radius:10px;margin:18px 0}
 summary{cursor:pointer;color:#70bdff}
-.status-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:12px}
-.status-item{padding:8px;background:#0b1729;border-radius:6px;font-size:13px}
 </style>
 </head>
 <body>
+
 <header>
 <h1>🎮 OYUN REHBERİ</h1>
 <p>PC oyunlarını keşfet, güncellemeleri takip et!</p>
@@ -51,7 +52,7 @@ summary{cursor:pointer;color:#70bdff}
 <div class="safe">
 <strong>🛡️ Güvenli Mod AÇIK</strong><br>
 Everyone, Everyone 10+ ve Teen dereceli oyunlar gösterilir.<br>
-Mature, Adults Only, yaş derecesi bilinmeyen ve engelli listedeki oyunlar gizlenir.
+Mature, Adults Only ve yaş derecesi bilinmeyen oyunlar gizlenir.
 </div>
 
 <div class="controls">
@@ -80,19 +81,23 @@ Mature, Adults Only, yaş derecesi bilinmeyen ve engelli listedeki oyunlar gizle
 </section>
 
 <section id="news" style="display:none">
-<h2>📰 Türkçe Oyun Haberleri</h2>
-<p class="muted">Listedeki bütün oyunlar için haber aranır.</p>
+<h2>📰 Oyun Haberleri</h2>
+<p class="muted">Listedeki bütün oyunlar için ayrı ayrı haber aranır.</p>
+
 <div class="controls">
 <select id="newsGame" onchange="renderNews()">
 <option value="">Bütün oyunlar</option>
 </select>
 <button onclick="loadNews()">↻ Haberleri yenile</button>
 </div>
+
 <div id="newsStatus" class="muted">Haberler henüz yüklenmedi.</div>
+
 <details>
-<summary>Oyunların haber arama durumları</summary>
+<summary>Oyunların haber arama durumu</summary>
 <div id="gameStatuses" class="status-list"></div>
 </details>
+
 <div class="news-grid" id="newsGrid"></div>
 </section>
 </main>
@@ -152,12 +157,17 @@ const games=[
 ["Scribblenauts Unlimited","Bulmaca","paid",2012,"Everyone 10+","Yazarak bulmacaları çöz."],
 ["Mini Metro","Strateji","paid",2015,"Everyone","Metro ağı tasarla."],
 ["World of Goo","Bulmaca","paid",2008,"Everyone","Fizik tabanlı yapılar kur."]
-].map(g=>({name:g[0],genre:g[1],price:g[2],year:g[3],age:g[4],desc:g[5]}));
+].map(g=>({
+name:g[0],genre:g[1],price:g[2],year:g[3],age:g[4],desc:g[5]
+}));
 
 const allowedRatings=["Everyone","Everyone 10+","Teen"];
 const blockedNames=["Hentai Clicker"];
-const safeGames=games.filter(g=>allowedRatings.includes(g.age)&&
-!blockedNames.some(b=>g.name.toLowerCase().includes(b.toLowerCase())));
+
+const safeGames=games.filter(g=>
+allowedRatings.includes(g.age)&&
+!blockedNames.some(b=>g.name.toLowerCase().includes(b.toLowerCase()))
+);
 
 function escapeHTML(s){
 return String(s||"").replace(/[&<>"']/g,c=>({
@@ -169,25 +179,34 @@ function render(){
 const q=document.getElementById("search").value.toLowerCase();
 const genre=document.getElementById("genre").value;
 const price=document.getElementById("price").value;
+
 const list=safeGames.filter(g=>
 g.name.toLowerCase().includes(q)&&
-(!genre||g.genre===genre)&&(!price||g.price===price)
+(!genre||g.genre===genre)&&
+(!price||g.price===price)
 );
-document.getElementById("count").textContent=list.length+" oyun gösteriliyor";
+
+document.getElementById("count").textContent=
+list.length+" oyun gösteriliyor";
+
 document.getElementById("gameGrid").innerHTML=list.map(g=>`
 <article class="game">
 <h3>${escapeHTML(g.name)}</h3>
 <div class="meta">${escapeHTML(g.genre)} · ${g.year}</div>
-<div><span class="tag">${g.price==="free"?"Ücretsiz":"Ücretli"}</span>
-<span class="tag">${escapeHTML(g.age)}</span></div>
+<div>
+<span class="tag">${g.price==="free"?"Ücretsiz":"Ücretli"}</span>
+<span class="tag">${escapeHTML(g.age)}</span>
+</div>
 <p>${escapeHTML(g.desc)}</p>
 <button onclick="openGame('${encodeURIComponent(g.name)}')">Detayları gör</button>
-</article>`).join("")||"<p>Oyun bulunamadı.</p>";
+</article>
+`).join("")||"<p>Oyun bulunamadı.</p>";
 }
 
 function openGame(encoded){
 const g=safeGames.find(x=>x.name===decodeURIComponent(encoded));
 if(!g)return;
+
 document.getElementById("detail").innerHTML=`
 <h2>${escapeHTML(g.name)}</h2>
 <p>${escapeHTML(g.desc)}</p>
@@ -195,41 +214,35 @@ document.getElementById("detail").innerHTML=`
 <p><b>Çıkış yılı:</b> ${g.year}</p>
 <p><b>Fiyat:</b> ${g.price==="free"?"Ücretsiz":"Ücretli"}</p>
 <p><b>Yaş derecesi:</b> ${escapeHTML(g.age)}</p>
-<p class="muted">Fiyat ve yaş bilgileri değişebilir. Mağazadan kontrol et.</p>`;
+<p class="muted">Fiyat ve yaş bilgileri değişebilir. Mağazadan kontrol et.</p>
+`;
 document.getElementById("modal").style.display="flex";
 }
-function closeModal(){document.getElementById("modal").style.display="none"}
+
+function closeModal(){
+document.getElementById("modal").style.display="none";
+}
 
 function showTab(tab){
-document.getElementById("games").style.display=tab==="games"?"block":"none";
-document.getElementById("news").style.display=tab==="news"?"block":"none";
+document.getElementById("games").style.display=
+tab==="games"?"block":"none";
+
+document.getElementById("news").style.display=
+tab==="news"?"block":"none";
+
 if(tab==="news"&&!newsLoaded)loadNews();
 }
 
-const blockedNewsWords=[
-"hentai","porn","nsfw","nudity","nude","erotic",
-"adult content","18+","çıplak","müstehcen","cinsel içerik"
-];
+/* HABER SİSTEMİ */
 
-function isSafeNews(title,description){
-const text=(title+" "+description).toLowerCase();
-return !blockedNewsWords.some(w=>text.includes(w));
-}
-
-function normalizeText(s){
-return String(s||"").toLocaleLowerCase("tr-TR")
-.normalize("NFD").replace(/[\u0300-\u036f]/g,"")
-.replace(/[^a-z0-9]+/g," ").trim();
-}
-
-function isTurkish(title){
-const t=String(title||"");
-const turkishWords=/\b(yeni|güncelleme|duyuruldu|geldi|geliyor|oyun|haber|sezon|kostüm|ücretsiz|oyuncu|sürüm|fragman|açıklandı|başlıyor|başladı|eklenecek|değişiklik|yama|notları|tanıtıldı|yayınlandı|çıktı|etkinlik|harita|karakter|içerik|resmi|resmî)\b/i;
-return /[çğıöşüÇĞİÖŞÜ]/.test(t)||turkishWords.test(t);
-}
+const PROXY="https://proxy.cors.dev/";
+let allNews=[];
+let newsLoaded=false;
+let newsLoading=false;
+let gameStatuses={};
 
 function proxyURL(url){
-return "https://proxy.cors.dev/"+url;
+return PROXY+url;
 }
 
 function nodeText(item,tag){
@@ -237,179 +250,224 @@ const node=item.getElementsByTagName(tag)[0];
 return node?node.textContent.trim():"";
 }
 
-function findImage(item,link){
+function getNewsImage(item){
 const tags=["media:thumbnail","media:content","enclosure"];
+
 for(const tag of tags){
 const node=item.getElementsByTagName(tag)[0];
 if(node){
 const url=node.getAttribute("url")||node.getAttribute("href");
-if(url){
-try{return new URL(url,link).href}catch{return url}
+if(url)return url;
 }
 }
-}
+
 const description=nodeText(item,"description");
 const doc=new DOMParser().parseFromString(description,"text/html");
 const img=doc.querySelector("img");
-if(img){
-try{return new URL(img.getAttribute("src"),link).href}catch{return ""}
-}
-return "";
+
+return img?img.getAttribute("src")||"":"";
 }
 
-function makeBatches(list,size){
-const batches=[];
-for(let i=0;i<list.length;i+=size)batches.push(list.slice(i,i+size));
-return batches;
-}
+function isSafeNews(title,description){
+const blocked=[
+"hentai","porn","nsfw","nudity","nude","erotic",
+"adult content","18+","çıplak","müstehcen","cinsel içerik"
+];
 
-function findMatchingGames(text){
-const normalized=normalizeText(text);
-return safeGames.filter(g=>{
-const name=normalizeText(g.name);
-return name&&normalized.includes(name);
-});
-}
-
-async function fetchBatch(batch){
-const terms=batch.map(g=>'"'+g.name+'"').join(" OR ");
-const googleURL="https://news.google.com/rss/search?q="+
-encodeURIComponent("("+terms+")")+
-"&hl=tr&gl=TR&ceid=TR:tr";
-
-const response=await fetch(proxyURL(googleURL));
-if(!response.ok)throw new Error("Haber kaynağı yanıt vermedi");
-const xmlText=await response.text();
-const xml=new DOMParser().parseFromString(xmlText,"text/xml");
-if(xml.querySelector("parsererror"))throw new Error("RSS okunamadı");
-
-return [...xml.querySelectorAll("item")].map(item=>{
-const title=nodeText(item,"title");
-const link=nodeText(item,"link");
-const description=nodeText(item,"description");
-const date=nodeText(item,"pubDate");
-const source=nodeText(item,"source");
-const matched=findMatchingGames(title+" "+description);
-return {
-title,link,description,date,source,
-image:findImage(item,link),
-games:matched.map(g=>g.name)
-};
-}).filter(n=>n.title&&n.link&&n.games.length&&
-isSafeNews(n.title,n.description)&&isTurkish(n.title));
+const text=(title+" "+description).toLowerCase();
+return !blocked.some(word=>text.includes(word));
 }
 
 function formatDate(date){
 const d=new Date(date);
 if(Number.isNaN(d.getTime()))return "Tarih belirtilmemiş";
+
 return d.toLocaleDateString("tr-TR",{
 day:"numeric",month:"long",year:"numeric"
 });
 }
 
-let newsLoaded=false;
-let newsLoading=false;
-let allNews=[];
-let gameResults={};
+async function fetchGameNews(game){
+const query='"'+game.name+'"';
+const googleURL=
+"https://news.google.com/rss/search?q="+
+encodeURIComponent(query)+
+"&hl=tr&gl=TR&ceid=TR:tr";
+
+const response=await fetch(proxyURL(googleURL),{
+credentials:"omit"
+});
+
+if(!response.ok){
+throw new Error("Haber kaynağı yanıt vermedi: "+response.status);
+}
+
+const xmlText=await response.text();
+const xml=new DOMParser().parseFromString(xmlText,"text/xml");
+
+if(xml.querySelector("parsererror")){
+throw new Error("RSS okunamadı");
+}
+
+return [...xml.querySelectorAll("item")].map(item=>({
+game:game.name,
+title:nodeText(item,"title"),
+link:nodeText(item,"link"),
+date:nodeText(item,"pubDate"),
+description:nodeText(item,"description"),
+source:nodeText(item,"source"),
+image:getNewsImage(item)
+})).filter(n=>
+n.title&&
+n.link&&
+isSafeNews(n.title,n.description)
+);
+}
 
 function setupNewsFilter(){
 const select=document.getElementById("newsGame");
-select.innerHTML='<option value="">Bütün oyunlar</option>'+
-safeGames.map(g=>`<option value="${escapeHTML(g.name)}">${escapeHTML(g.name)}</option>`).join("");
+
+select.innerHTML=
+'<option value="">Bütün oyunlar</option>'+
+safeGames.map(g=>
+`<option value="${escapeHTML(g.name)}">${escapeHTML(g.name)}</option>`
+).join("");
 }
 
 function renderStatuses(){
-document.getElementById("gameStatuses").innerHTML=safeGames.map(g=>{
-const count=gameResults[g.name]||0;
-return `<div class="status-item">${escapeHTML(g.name)}: ${count?count+" haber":"Eşleşen haber yok"}</div>`;
+document.getElementById("gameStatuses").innerHTML=
+safeGames.map(g=>{
+const result=gameStatuses[g.name];
+
+let message="Henüz aranmadı";
+
+if(result==="loading")message="Aranıyor...";
+else if(result==="error")message="Arama başarısız";
+else if(typeof result==="number")
+message=result+" haber bulundu";
+
+return `<div class="status-item">
+${escapeHTML(g.name)}: ${message}
+</div>`;
 }).join("");
 }
 
 function renderNews(){
 const selected=document.getElementById("newsGame").value;
-const list=selected?allNews.filter(n=>n.games.includes(selected)):allNews;
+
+const list=selected
+?allNews.filter(n=>n.game===selected)
+:allNews;
+
 const grid=document.getElementById("newsGrid");
 
 if(!list.length){
-grid.innerHTML="";
-if(newsLoaded){
-document.getElementById("newsStatus").textContent=selected?
-selected+" için eşleşen Türkçe haber bulunamadı.":
-"Şu anda eşleşen Türkçe haber bulunamadı. Daha sonra tekrar deneyebilirsin.";
-}
+grid.innerHTML="<p>Bu oyun için haber bulunamadı.</p>";
 return;
 }
 
 grid.innerHTML=list.map(n=>`
 <article class="news-card">
-${n.image?
-`<img src="${escapeHTML(n.image)}" alt="${escapeHTML(n.title)}" loading="lazy"
-onerror="this.outerHTML='<div class=no-image>Görsel bulunamadı</div>'">`:
-`<div class="no-image">Görsel bulunamadı</div>`}
+${
+n.image
+?`<img src="${escapeHTML(n.image)}"
+alt="${escapeHTML(n.title)}"
+loading="lazy"
+onerror="this.outerHTML='<div class=no-image>Görsel bulunamadı</div>'">`
+:`<div class="no-image">Görsel bulunamadı</div>`
+}
 <div class="news-content">
-<div>${n.games.map(g=>`<span class="tag">${escapeHTML(g)}</span>`).join(" ")}</div>
+<span class="tag">${escapeHTML(n.game)}</span>
 <h3>${escapeHTML(n.title)}</h3>
 <span class="meta">${escapeHTML(formatDate(n.date))}</span>
 ${n.source?`<span class="meta">Kaynak: ${escapeHTML(n.source)}</span>`:""}
-<a href="${escapeHTML(n.link)}" target="_blank" rel="noopener noreferrer">Haberi Oku →</a>
+<a href="${escapeHTML(n.link)}"
+target="_blank"
+rel="noopener noreferrer">Haberi Oku →</a>
 </div>
-</article>`).join("");
+</article>
+`).join("");
 }
 
 async function loadNews(){
 if(newsLoading)return;
+
 newsLoading=true;
 newsLoaded=true;
 allNews=[];
-gameResults={};
-safeGames.forEach(g=>gameResults[g.name]=0);
+gameStatuses={};
+
+safeGames.forEach(g=>gameStatuses[g.name]="loading");
 
 const status=document.getElementById("newsStatus");
 const grid=document.getElementById("newsGrid");
-status.textContent="44 oyun için Türkçe haberler aranıyor...";
+
+status.textContent="Listedeki "+safeGames.length+
+" oyunun haberleri aranıyor...";
 grid.innerHTML="";
+
 renderStatuses();
 
-try{
-const batches=makeBatches(safeGames,5);
-const results=await Promise.allSettled(batches.map(fetchBatch));
-let found=[];
+let completed=0;
 
-results.forEach(result=>{
-if(result.status==="fulfilled")found.push(...result.value);
+for(let i=0;i<safeGames.length;i+=4){
+const batch=safeGames.slice(i,i+4);
+
+const results=await Promise.allSettled(
+batch.map(game=>fetchGameNews(game))
+);
+
+results.forEach((result,index)=>{
+const game=batch[index];
+
+if(result.status==="fulfilled"){
+const items=result.value;
+gameStatuses[game.name]=items.length;
+
+allNews.push(...items);
+}else{
+gameStatuses[game.name]="error";
+}
+
+completed++;
 });
+
+status.textContent=
+"Haber aranıyor: "+completed+" / "+safeGames.length+" oyun";
+
+renderStatuses();
+renderNews();
+}
 
 const unique=new Map();
-found.forEach(n=>{
-if(!unique.has(n.link))unique.set(n.link,n);
+
+allNews.forEach(n=>{
+const key=n.game+"|"+n.link;
+if(!unique.has(key))unique.set(key,n);
 });
+
 allNews=[...unique.values()].sort((a,b)=>
 new Date(b.date||0)-new Date(a.date||0)
 );
 
-allNews.forEach(n=>{
-n.games.forEach(g=>gameResults[g]=(gameResults[g]||0)+1);
-});
+const failed=safeGames.filter(g=>
+gameStatuses[g.name]==="error"
+).length;
 
-const failed=results.filter(r=>r.status==="rejected").length;
-const gamesWithNews=safeGames.filter(g=>gameResults[g.name]>0).length;
+const found=safeGames.filter(g=>
+typeof gameStatuses[g.name]==="number"&&gameStatuses[g.name]>0
+).length;
 
-if(!allNews.length&&failed===results.length){
-status.textContent="Haber servisine şu anda ulaşılamıyor. Biraz sonra tekrar dene.";
-}else{
-status.textContent=allNews.length+" haber bulundu. "+
-gamesWithNews+" oyunda haber eşleşti. "+
-(safeGames.length-gamesWithNews)+" oyunda eşleşen haber bulunamadı."+
-(failed?" Bazı haber aramaları başarısız oldu.":"");
-}
+status.textContent=
+allNews.length+" haber bulundu. "+
+found+" oyunda haber eşleşti. "+
+(safeGames.length-found)+" oyunda eşleşen haber yok."+
+(failed?" "+failed+" oyunun araması başarısız oldu.":"");
 
 renderStatuses();
 renderNews();
-}catch(error){
-status.textContent="Haberler yüklenemedi. İnternet bağlantını kontrol edip tekrar dene.";
-}finally{
+
 newsLoading=false;
-}
 }
 
 setupNewsFilter();
