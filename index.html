@@ -12,53 +12,52 @@ header{padding:25px 6%;background:#101a2c;border-bottom:1px solid #233653}
 h1{margin:0;color:#35aaff;letter-spacing:2px}
 header p{color:#9eb1ce}
 nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
-button,select,input{background:#17243a;color:white;border:1px solid #304563;padding:12px;border-radius:9px}
+button,input,select{background:#17243a;color:white;border:1px solid #304563;padding:12px;border-radius:9px}
 button{cursor:pointer}
 button:hover{background:#1765a5}
 .active{background:#087bd0}
 main{padding:25px 6%}
+.panel{background:#111d30;padding:20px;border:1px solid #263b5a;border-radius:12px;margin-bottom:18px}
 .controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
 .controls input{flex:1;min-width:180px}
-#games{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:18px}
-.game{background:#111d30;border:1px solid #243957;border-radius:13px;overflow:hidden;cursor:pointer;transition:.2s}
-.game:hover{transform:translateY(-4px);border-color:#168ee9}
-.game img{width:100%;height:135px;object-fit:cover;background:#202d40}
-.game-info{padding:13px}
-.game h3{margin:0 0 9px;font-size:16px}
+#gameGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.game{background:#111d30;border:1px solid #243957;border-radius:13px;padding:16px;cursor:pointer}
+.game:hover{border-color:#168ee9;transform:translateY(-3px)}
+.game h3{margin:0 0 10px}
 .small{color:#9db1cc;font-size:13px}
 #status{color:#9db1cc;margin:15px 0}
 #more{display:block;margin:25px auto}
-.panel{background:#111d30;padding:20px;border:1px solid #263b5a;border-radius:12px;margin-bottom:18px}
+#news{display:none}
 .news-item{padding:15px 0;border-bottom:1px solid #293a53}
 .news-item a{color:#65bdff;text-decoration:none;font-weight:bold}
 .news-item p{color:#aebed4;font-size:13px}
-#news{display:none}
-#modal{display:none;position:fixed;inset:0;background:#000c;overflow:auto;padding:20px;z-index:5}
-.modal-content{max-width:750px;margin:30px auto;background:#111d30;border:1px solid #345071;border-radius:15px;padding:22px}
-.modal-content img{width:100%;max-height:330px;object-fit:cover;border-radius:10px}
+#modal{display:none;position:fixed;inset:0;background:#000d;overflow:auto;padding:20px;z-index:5}
+.modal-content{max-width:700px;margin:30px auto;background:#111d30;border:1px solid #345071;border-radius:15px;padding:22px}
 .modal-content p{line-height:1.6;color:#c5d3e7}
 .close{float:right}
-a{color:#65bdff}
 footer{text-align:center;padding:30px;color:#8296b2}
+.safe{color:#62e6a0}
 </style>
 </head>
 <body>
+
 <header>
 <h1>🎮 OYUN REHBERİ</h1>
-<p>Oyunları keşfet, incele, haberleri takip et!</p>
+<p>Oyunları keşfet, incele ve haberleri takip et!</p>
 <nav>
 <button id="gamesTab" class="active" onclick="showTab('games')">🎮 Tüm Oyunlar</button>
-<button id="newsTab" onclick="showTab('news')">📰 Haberler & Güncellemeler</button>
+<button id="newsTab" onclick="showTab('news')">📰 Haberler</button>
 </nav>
 </header>
 
 <main>
 <section id="games">
-<div class="panel" style="grid-column:1/-1">
-<h2>Oyun kataloğu</h2>
-<p class="small">RAWG oyun veritabanından oyunları keşfet.</p>
+<div class="panel">
+<h2>🛡️ Güvenli Mod <span class="safe">AÇIK</span></h2>
+<p>Yalnızca ESRB Everyone, Everyone 10+ ve Teen dereceli oyunlar gösterilir.</p>
+<p class="small">Mature, Adults Only ve yaş derecesi bulunmayan oyunlar gizlenir. Oyun kapakları gösterilmez.</p>
 <input id="apiKey" type="password" placeholder="RAWG API anahtarını buraya yapıştır" style="width:100%">
-<p class="small">Anahtar bu oturum boyunca bellekte tutulur; sayfayı yenilersen tekrar girmen gerekir.</p>
+<p class="small">Anahtar sayfa yenilenince silinir. Herkese açık sitelerde API anahtarının görülebileceğini unutma.</p>
 <button onclick="start()">Bağlan ve oyunları getir</button>
 </div>
 </section>
@@ -66,7 +65,9 @@ footer{text-align:center;padding:30px;color:#8296b2}
 <section id="gameArea" style="display:none">
 <div class="controls">
 <input id="search" placeholder="Oyun ara...">
-<select id="genre"><option value="">Tüm türler</option></select>
+<select id="genre">
+<option value="">Tüm türler</option>
+</select>
 <button onclick="searchGames()">Ara</button>
 </div>
 <div id="status">Oyunlar yüklenmeye hazır.</div>
@@ -76,8 +77,8 @@ footer{text-align:center;padding:30px;color:#8296b2}
 
 <section id="news">
 <div class="panel">
-<h2>📰 Oyun haberleri</h2>
-<p class="small">Oyun dünyasındaki haberler ve güncelleme duyuruları. Haberler harici RSS kaynaklarından alınır; kaynakta yayınlanan başlık ve bağlantılar gösterilir.</p>
+<h2>📰 Oyun Haberleri</h2>
+<p class="small">Oyun haberlerinin başlıkları ve kaynak bağlantıları gösterilir. Uygunsuz olabilecek kelimeler içeren başlıklar filtrelenir.</p>
 <button onclick="loadNews()">Haberleri yenile</button>
 <div id="newsStatus" class="small"></div>
 <div id="newsList"></div>
@@ -92,7 +93,7 @@ footer{text-align:center;padding:30px;color:#8296b2}
 </div>
 </div>
 
-<footer>OYUN REHBERİ © 2026 · Oyun verileri: <a href="https://rawg.io" target="_blank">RAWG</a></footer>
+<footer>OYUN REHBERİ © 2026 · Oyun bilgileri: RAWG</footer>
 
 <script>
 let KEY="";
@@ -100,19 +101,33 @@ let page=1;
 let nextPage=null;
 let currentSearch="";
 let currentGenre="";
-let genres=[];
+
+const SAFE_RATINGS=[
+ "everyone",
+ "everyone-10-plus",
+ "teen"
+];
+
+const BLOCKED_NEWS=[
+ "nsfw","18+","adult content","nude","nudity",
+ "porn","porno","çıplak","çıplaklık","müstehcen",
+ "cinsel içerik","erotik","yetişkin içerik"
+];
 
 function showTab(tab){
- document.getElementById("games").style.display=tab==="games"?"grid":"none";
+ document.getElementById("games").style.display=tab==="games"?"block":"none";
  document.getElementById("gameArea").style.display=tab==="games"&&KEY?"block":"none";
  document.getElementById("news").style.display=tab==="news"?"block":"none";
  document.getElementById("gamesTab").classList.toggle("active",tab==="games");
  document.getElementById("newsTab").classList.toggle("active",tab==="news");
- if(tab==="news"&&!document.getElementById("newsList").children.length)loadNews();
+ if(tab==="news"&&!document.getElementById("newsList").children.length){
+  loadNews();
+ }
 }
 
 async function api(path){
- const url="https://api.rawg.io/api/"+path+(path.includes("?")?"&":"?")+"key="+encodeURIComponent(KEY);
+ const separator=path.includes("?")?"&":"?";
+ const url="https://api.rawg.io/api/"+path+separator+"key="+encodeURIComponent(KEY);
  const response=await fetch(url);
  if(!response.ok)throw new Error("RAWG bağlantı hatası: "+response.status);
  return response.json();
@@ -120,14 +135,16 @@ async function api(path){
 
 async function start(){
  KEY=document.getElementById("apiKey").value.trim();
- if(!KEY){alert("Önce RAWG API anahtarını gir.");return}
+ if(!KEY){
+  alert("Önce RAWG API anahtarını gir.");
+  return;
+ }
  try{
   document.getElementById("status").textContent="Bağlanılıyor...";
   const data=await api("genres?page_size=40");
-  genres=data.results||[];
   const select=document.getElementById("genre");
   select.innerHTML='<option value="">Tüm türler</option>';
-  genres.forEach(g=>{
+  (data.results||[]).forEach(g=>{
    const option=document.createElement("option");
    option.value=g.slug;
    option.textContent=g.name;
@@ -137,30 +154,65 @@ async function start(){
   document.getElementById("gameArea").style.display="block";
   await searchGames();
  }catch(e){
-  document.getElementById("status").textContent=e.message+" — API anahtarını kontrol et.";
+  document.getElementById("status").textContent=e.message+" API anahtarını kontrol et.";
+ }
+}
+
+async function isSafeGame(game){
+ try{
+  let rating=game.esrb_rating;
+  if(!rating){
+   const details=await api("games/"+game.id);
+   rating=details.esrb_rating;
+  }
+  if(!rating||!rating.slug)return false;
+  return SAFE_RATINGS.includes(rating.slug.toLowerCase());
+ }catch(e){
+  return false;
  }
 }
 
 async function searchGames(reset=true){
  if(!KEY)return;
+
  if(reset){
   page=1;
   currentSearch=document.getElementById("search").value.trim();
   currentGenre=document.getElementById("genre").value;
   document.getElementById("gameGrid").innerHTML="";
  }
- document.getElementById("status").textContent="Oyunlar yükleniyor...";
+
+ document.getElementById("status").textContent="Oyunlar kontrol ediliyor...";
+ document.getElementById("more").style.display="none";
+
  try{
   let params="games?page="+page+"&page_size=24&ordering=-rating";
   if(currentSearch)params+="&search="+encodeURIComponent(currentSearch);
   if(currentGenre)params+="&genres="+encodeURIComponent(currentGenre);
+
   const data=await api(params);
   nextPage=data.next;
-  renderGames(data.results||[]);
+
+  const checks=await Promise.all(
+   (data.results||[]).map(async game=>({
+    game,
+    safe:await isSafeGame(game)
+   }))
+  );
+
+  const safeGames=checks.filter(x=>x.safe).map(x=>x.game);
+  renderGames(safeGames);
+
   document.getElementById("status").textContent=
-   (data.count||0).toLocaleString("tr-TR")+" oyun bulundu. Gösterilen: "+
-   document.getElementById("gameGrid").children.length;
+   "Güvenli yaş derecesine sahip "+safeGames.length+
+   " oyun gösteriliyor. Diğer oyunlar filtrelendi.";
+
   document.getElementById("more").style.display=nextPage?"block":"none";
+
+  if(!safeGames.length&&nextPage){
+   document.getElementById("status").textContent=
+    "Bu sayfada uygun dereceli oyun bulunamadı. Diğer sayfaya geçebilirsin.";
+  }
  }catch(e){
   document.getElementById("status").textContent=e.message;
  }
@@ -168,22 +220,27 @@ async function searchGames(reset=true){
 
 function renderGames(items){
  const grid=document.getElementById("gameGrid");
+
  items.forEach(game=>{
   const card=document.createElement("article");
   card.className="game";
-  const image=document.createElement("img");
-  image.src=game.background_image||"";
-  image.alt=game.name;
-  image.loading="lazy";
-  const info=document.createElement("div");
-  info.className="game-info";
+
   const title=document.createElement("h3");
-  title.textContent=game.name;
-  const meta=document.createElement("div");
-  meta.className="small";
-  meta.textContent="⭐ "+(game.rating||"Puan yok")+" · "+(game.released||"Tarih yok");
-  info.append(title,meta);
-  card.append(image,info);
+  title.textContent="🎮 "+game.name;
+
+  const rating=document.createElement("p");
+  rating.className="small";
+  rating.textContent="⭐ "+(game.rating||"Puan yok");
+
+  const date=document.createElement("p");
+  date.className="small";
+  date.textContent="Çıkış tarihi: "+(game.released||"Bilinmiyor");
+
+  const genre=document.createElement("p");
+  genre.className="small";
+  genre.textContent="Tür: "+(game.genres||[]).map(x=>x.name).join(", ");
+
+  card.append(title,rating,date,genre);
   card.onclick=()=>openGame(game.id);
   grid.appendChild(card);
  });
@@ -197,61 +254,118 @@ async function loadMore(){
 
 async function openGame(id){
  document.getElementById("modal").style.display="block";
- document.getElementById("detail").textContent="Oyun bilgileri yükleniyor...";
+ const box=document.getElementById("detail");
+ box.textContent="Oyun güvenlik bilgileri kontrol ediliyor...";
+
  try{
   const g=await api("games/"+id);
-  const box=document.getElementById("detail");
-  box.innerHTML="";
-  const h=document.createElement("h2");h.textContent=g.name;
-  box.appendChild(h);
-  if(g.background_image){
-   const img=document.createElement("img");img.src=g.background_image;img.alt=g.name;box.appendChild(img);
+
+  if(!g.esrb_rating||!SAFE_RATINGS.includes(g.esrb_rating.slug)){
+   box.textContent="Bu oyun güvenli yaş derecesi kontrolünden geçemedi.";
+   return;
   }
-  const p=document.createElement("p");
-  p.textContent="⭐ "+(g.rating||"Puan yok")+" | Metacritic: "+(g.metacritic||"Yok")+" | Çıkış: "+(g.released||"Bilinmiyor");
-  box.appendChild(p);
-  const desc=document.createElement("p");
-  desc.textContent=g.description_raw||"Bu oyun için açıklama bulunamadı.";
-  box.appendChild(desc);
+
+  box.innerHTML="";
+
+  const title=document.createElement("h2");
+  title.textContent="🎮 "+g.name;
+
+  const rating=document.createElement("p");
+  rating.textContent="Yaş derecesi: "+g.esrb_rating.name;
+
+  const date=document.createElement("p");
+  date.textContent="Çıkış tarihi: "+(g.released||"Bilinmiyor");
+
+  const score=document.createElement("p");
+  score.textContent="Puan: "+(g.rating||"Puan yok");
+
+  const genres=document.createElement("p");
+  genres.textContent="Türler: "+(g.genres||[]).map(x=>x.name).join(", ");
+
   const platforms=document.createElement("p");
   platforms.textContent="Platformlar: "+(g.platforms||[]).map(x=>x.platform.name).join(", ");
-  box.appendChild(platforms);
-  const genre=document.createElement("p");
-  genre.textContent="Türler: "+(g.genres||[]).map(x=>x.name).join(", ");
-  box.appendChild(genre);
+
+  const warning=document.createElement("p");
+  warning.className="small";
+  warning.textContent="Bu oyun yaş derecesi filtresinden geçti. Yine de içerik bilgilerini kontrol et.";
+
+  box.append(title,rating,date,score,genres,platforms,warning);
+
   if(g.website){
-   const a=document.createElement("a");a.href=g.website;a.target="_blank";a.rel="noopener";a.textContent="Resmî oyun sitesi";box.appendChild(a);
+   const link=document.createElement("a");
+   link.href=g.website;
+   link.target="_blank";
+   link.rel="noopener";
+   link.textContent="Resmî oyun sitesi";
+   box.appendChild(link);
   }
- }catch(e){document.getElementById("detail").textContent=e.message}
+ }catch(e){
+  box.textContent="Oyun bilgileri yüklenemedi.";
+ }
 }
-function closeModal(){document.getElementById("modal").style.display="none"}
+
+function closeModal(){
+ document.getElementById("modal").style.display="none";
+}
+
+function blockedNews(title){
+ const text=title.toLowerCase();
+ return BLOCKED_NEWS.some(word=>text.includes(word));
+}
 
 async function loadNews(){
  const list=document.getElementById("newsList");
  const status=document.getElementById("newsStatus");
+
  list.innerHTML="";
  status.textContent="Haberler getiriliyor...";
- const feed="https://news.google.com/rss/search?q=video+game+updates+OR+oyun+g%C3%BCncelleme&hl=tr&gl=TR&ceid=TR:tr";
+
+ const feed="https://news.google.com/rss/search?q=video+game+updates+OR+gaming+news&hl=tr&gl=TR&ceid=TR:tr";
+
  try{
-  const response=await fetch("https://api.allorigins.win/raw?url="+encodeURIComponent(feed));
+  const response=await fetch(
+   "https://api.allorigins.win/raw?url="+encodeURIComponent(feed)
+  );
+
   if(!response.ok)throw new Error("Haber kaynağına ulaşılamadı.");
-  const xml=new DOMParser().parseFromString(await response.text(),"text/xml");
-  const items=[...xml.querySelectorAll("item")].slice(0,25);
-  if(!items.length)throw new Error("Şu anda haber bulunamadı.");
+
+  const xml=new DOMParser().parseFromString(
+   await response.text(),
+   "text/xml"
+  );
+
+  const items=[...xml.querySelectorAll("item")];
+  let shown=0;
+
   items.forEach(item=>{
-   const row=document.createElement("div");row.className="news-item";
-   const a=document.createElement("a");
-   a.href=item.querySelector("link")?.textContent||"#";
-   a.target="_blank";a.rel="noopener";
-   a.textContent=item.querySelector("title")?.textContent||"Haber";
-   const p=document.createElement("p");
-   p.textContent=(item.querySelector("pubDate")?.textContent||"")+
-    " · "+(item.querySelector("source")?.textContent||"Haber kaynağı");
-   row.append(a,p);list.appendChild(row);
+   const title=item.querySelector("title")?.textContent||"";
+   if(!title||blockedNews(title))return;
+
+   const url=item.querySelector("link")?.textContent||"";
+   if(!url.startsWith("https://"))return;
+
+   const row=document.createElement("div");
+   row.className="news-item";
+
+   const link=document.createElement("a");
+   link.href=url;
+   link.target="_blank";
+   link.rel="noopener";
+   link.textContent=title;
+
+   const date=document.createElement("p");
+   date.textContent=item.querySelector("pubDate")?.textContent||"";
+
+   row.append(link,date);
+   list.appendChild(row);
+   shown++;
   });
-  status.textContent=items.length+" haber gösteriliyor.";
+
+  status.textContent=shown?
+   shown+" uygun başlık gösteriliyor.":
+   "Uygun haber bulunamadı.";
  }catch(e){
-  status.textContent="Haberler şu anda yüklenemedi. Daha sonra tekrar deneyebilirsin.";
+  status.textContent="Haberler şu anda yüklenemedi. Daha sonra tekrar dene.";
  }
 }
 </script>
