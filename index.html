@@ -3,278 +3,257 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OYUN REHBERİ</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#080e19;color:#f3f7ff;font-family:Arial,sans-serif}
-header{padding:35px 6%;background:linear-gradient(120deg,#071a35,#124477,#071a35)}
-header h1{margin:0;font-size:35px}header h1 span{color:#48b3ff}
-header p{color:#d0e2f8}
-nav{position:sticky;top:0;z-index:5;background:#0d1727;padding:14px 6%;display:flex;justify-content:space-between;align-items:center;gap:15px;border-bottom:1px solid #243c5b}
-.logo{color:#55b5ff;font-weight:bold}
-input{background:#14243a;color:white;border:1px solid #355477;border-radius:9px;padding:12px;width:min(420px,70%);outline:none}
+body{margin:0;background:#080d18;color:#eaf1ff;font-family:Arial,sans-serif}
+header{padding:25px 6%;background:#101a2c;border-bottom:1px solid #233653}
+h1{margin:0;color:#35aaff;letter-spacing:2px}
+header p{color:#9eb1ce}
+nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+button,select,input{background:#17243a;color:white;border:1px solid #304563;padding:12px;border-radius:9px}
+button{cursor:pointer}
+button:hover{background:#1765a5}
+.active{background:#087bd0}
 main{padding:25px 6%}
-.heading{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
-.count{color:#52b5ff;font-weight:bold}
-.filters{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 25px}
-.filters button{background:#15263d;color:#dceaff;border:1px solid #304968;border-radius:20px;padding:9px 14px;cursor:pointer}
-.filters button.active,.filters button:hover{background:#087de1;color:white}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:17px}
-.card{background:#111d2f;border:1px solid #263d5b;border-radius:13px;overflow:hidden;cursor:pointer;transition:.2s}
-.card:hover{transform:translateY(-4px);border-color:#168cff}
-.cover{height:135px;background:linear-gradient(135deg,#193c63,#101b2d);display:flex;align-items:center;justify-content:center;overflow:hidden}
-.cover img{width:100%;height:100%;object-fit:cover}
-.emoji{font-size:55px}
-.cardbody{padding:13px}
-.card h3{font-size:17px;margin:0 0 8px}
-.meta{font-size:12px;color:#9fb2ce}
-.tag{display:inline-block;background:#12395f;color:#8bcaff;border-radius:15px;padding:5px 9px;font-size:11px;margin-top:10px}
-.empty{display:none;text-align:center;padding:50px;color:#9fb2ce}
-footer{text-align:center;padding:30px;color:#8497b2}
-.modal{display:none;position:fixed;inset:0;background:#000d;z-index:10;padding:15px;align-items:center;justify-content:center}
-.modal.show{display:flex}
-.modalbox{background:#101e32;border:1px solid #355579;border-radius:15px;width:min(800px,100%);max-height:92vh;overflow:auto;padding:22px;position:relative}
-.close{position:sticky;float:right;top:0;background:#263d5b;color:white;border:0;padding:10px 13px;border-radius:7px;cursor:pointer;z-index:2}
-.modalcover{height:210px;border-radius:10px;background:#183456;display:flex;align-items:center;justify-content:center;overflow:hidden;margin:35px 0 16px}
-.modalcover img{width:100%;height:100%;object-fit:cover}
-.modalcover span{font-size:75px}
-.modalbox h2{margin:8px 0;font-size:27px}
-.modalbox p{line-height:1.7;color:#c7d7eb}
-.section{background:#172940;border:1px solid #263e5b;border-radius:10px;padding:16px;margin:13px 0}
-.section h3{margin:0 0 12px;color:#67baff;font-size:17px}
-.description-line{padding:9px 11px;margin:8px 0;background:#1c324d;border-left:3px solid #168cff;border-radius:5px;line-height:1.65;color:#e0eafa}
-.info{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.info div{background:#1b304b;padding:13px;border-radius:8px;font-size:13px;color:#c9d9ee}
-.info b{display:block;color:#70bdff;margin-bottom:6px}
-.link{display:inline-block;background:#087de1;color:white;text-decoration:none;padding:12px 18px;border-radius:8px;margin:8px 8px 0 0;font-weight:bold}
-.small{font-size:12px;color:#9fb2ce}
-@media(max-width:600px){header h1{font-size:26px}main{padding:20px 4%}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cover{height:105px}.card h3{font-size:14px}.modalcover{height:150px}.info{grid-template-columns:1fr}}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.controls input{flex:1;min-width:180px}
+#games{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:18px}
+.game{background:#111d30;border:1px solid #243957;border-radius:13px;overflow:hidden;cursor:pointer;transition:.2s}
+.game:hover{transform:translateY(-4px);border-color:#168ee9}
+.game img{width:100%;height:135px;object-fit:cover;background:#202d40}
+.game-info{padding:13px}
+.game h3{margin:0 0 9px;font-size:16px}
+.small{color:#9db1cc;font-size:13px}
+#status{color:#9db1cc;margin:15px 0}
+#more{display:block;margin:25px auto}
+.panel{background:#111d30;padding:20px;border:1px solid #263b5a;border-radius:12px;margin-bottom:18px}
+.news-item{padding:15px 0;border-bottom:1px solid #293a53}
+.news-item a{color:#65bdff;text-decoration:none;font-weight:bold}
+.news-item p{color:#aebed4;font-size:13px}
+#news{display:none}
+#modal{display:none;position:fixed;inset:0;background:#000c;overflow:auto;padding:20px;z-index:5}
+.modal-content{max-width:750px;margin:30px auto;background:#111d30;border:1px solid #345071;border-radius:15px;padding:22px}
+.modal-content img{width:100%;max-height:330px;object-fit:cover;border-radius:10px}
+.modal-content p{line-height:1.6;color:#c5d3e7}
+.close{float:right}
+a{color:#65bdff}
+footer{text-align:center;padding:30px;color:#8296b2}
 </style>
 </head>
 <body>
 <header>
-<h1>OYUN <span>REHBERİ</span></h1>
-<p>69 oyunu keşfet. Oynanışlarını öğren. Yeni maceralara başla!</p>
-</header>
+<h1>🎮 OYUN REHBERİ</h1>
+<p>Oyunları keşfet, incele, haberleri takip et!</p>
 <nav>
-<div class="logo">🎮 OYUN REHBERİ</div>
-<input id="search" placeholder="Oyun ara...">
+<button id="gamesTab" class="active" onclick="showTab('games')">🎮 Tüm Oyunlar</button>
+<button id="newsTab" onclick="showTab('news')">📰 Haberler & Güncellemeler</button>
 </nav>
-<main>
-<div class="heading">
-<h2>Oyun Kütüphanesi</h2>
-<div class="count" id="count">69 OYUN</div>
-</div>
-<div class="filters" id="filters">
-<button class="active" data-filter="Hepsi">Hepsi</button>
-<button data-filter="FPS">FPS</button>
-<button data-filter="Aksiyon">Aksiyon</button>
-<button data-filter="RPG">RPG</button>
-<button data-filter="Simülasyon">Simülasyon</button>
-<button data-filter="Strateji">Strateji</button>
-<button data-filter="Yarış">Yarış</button>
-<button data-filter="Platform">Platform</button>
-<button data-filter="Hayatta Kalma">Hayatta Kalma</button>
-<button data-filter="Bulmaca">Bulmaca</button>
-</div>
-<div class="grid" id="games"></div>
-<div class="empty" id="empty">Oyun bulunamadı.</div>
-</main>
-<footer>© 2026 Oyun Rehberi · 69 Oyun</footer>
+</header>
 
-<div class="modal" id="modal">
-<div class="modalbox">
-<button class="close" id="close">Kapat ✕</button>
-<div class="modalcover" id="modalcover"></div>
-<h2 id="modalname"></h2>
-<div class="meta" id="modalmeta"></div>
-<div class="section">
-<h3>📖 Oyun hakkında ve hikâyesi</h3>
-<div id="description"></div>
+<main>
+<section id="games">
+<div class="panel" style="grid-column:1/-1">
+<h2>Oyun kataloğu</h2>
+<p class="small">RAWG oyun veritabanından oyunları keşfet.</p>
+<input id="apiKey" type="password" placeholder="RAWG API anahtarını buraya yapıştır" style="width:100%">
+<p class="small">Anahtar bu oturum boyunca bellekte tutulur; sayfayı yenilersen tekrar girmen gerekir.</p>
+<button onclick="start()">Bağlan ve oyunları getir</button>
 </div>
-<div class="section">
-<h3>🎮 Oynanış rehberi</h3>
-<div id="gameplay"></div>
+</section>
+
+<section id="gameArea" style="display:none">
+<div class="controls">
+<input id="search" placeholder="Oyun ara...">
+<select id="genre"><option value="">Tüm türler</option></select>
+<button onclick="searchGames()">Ara</button>
 </div>
-<div class="section">
-<h3>⭐ Öne çıkan özellikler</h3>
-<div id="features"></div>
+<div id="status">Oyunlar yüklenmeye hazır.</div>
+<div id="gameGrid"></div>
+<button id="more" onclick="loadMore()" style="display:none">Daha fazla oyun yükle</button>
+</section>
+
+<section id="news">
+<div class="panel">
+<h2>📰 Oyun haberleri</h2>
+<p class="small">Oyun dünyasındaki haberler ve güncelleme duyuruları. Haberler harici RSS kaynaklarından alınır; kaynakta yayınlanan başlık ve bağlantılar gösterilir.</p>
+<button onclick="loadNews()">Haberleri yenile</button>
+<div id="newsStatus" class="small"></div>
+<div id="newsList"></div>
 </div>
-<div class="info">
-<div><b>Oyun türü</b><span id="genre"></span></div>
-<div><b>Platform</b><span id="platform"></span></div>
-<div><b>Çıkış yılı</b><span id="year"></span></div>
-<div><b>Depolama alanı</b>Güncel boyut sürüme ve güncellemelere göre değişir.</div>
-<div><b>Fiyat</b>Ülkeye ve mağazaya göre değişebilir.</div>
-<div><b>Oyun modu</b><span id="mode"></span></div>
-</div>
-<div class="section">
-<h3>💻 Sistem gereksinimleri</h3>
-<p>İşlemci, RAM, ekran kartı ve depolama gereksinimleri oyunun sürümüne göre değişebilir. Kesin minimum ve önerilen özellikleri resmî mağaza sayfasından kontrol et.</p>
-<p class="small">Not: Minimum gereksinimleri karşılamak belirli bir FPS garantisi vermez.</p>
-</div>
-<a class="link" id="official" href="#" target="_blank" rel="noopener">Resmî oyun sayfası ↗</a>
+</section>
+</main>
+
+<div id="modal" onclick="if(event.target===this)closeModal()">
+<div class="modal-content">
+<button class="close" onclick="closeModal()">✖ Kapat</button>
+<div id="detail"></div>
 </div>
 </div>
+
+<footer>OYUN REHBERİ © 2026 · Oyun verileri: <a href="https://rawg.io" target="_blank">RAWG</a></footer>
 
 <script>
-const games=[
-["VALORANT","FPS","PC","🎯",2020,"https://playvalorant.com/tr-tr/","VALORANT, yakın gelecekte geçen rekabetçi bir takım nişancı oyunudur.|Oyuncular farklı ülkelerden gelen ve özel yeteneklere sahip ajanları seçer.|Takımlar saldırı ve savunma taraflarında mücadele ederek raundları kazanmaya çalışır.","Her maçta önce oynamak istediğin ajanı seçersin.|Haritaya göre takımınla birlikte ilerler, yeteneklerini ve silahlarını kullanırsın.|Rakibin hamlelerini tahmin etmek ve takım arkadaşlarınla iletişim kurmak önemlidir.","Farklı yeteneklere sahip ajanlar bulunur.|Dereceli, derecesiz ve farklı kısa oyun modları vardır.|Haritalar farklı takım stratejileri geliştirmene imkân verir.","Çok oyunculu takım oyunu"],
-["Counter-Strike 2","FPS","PC","🔫",2023,"https://www.counter-strike.net/cs2","Counter-Strike 2, terörist ve anti-terörist takımlarının karşı karşıya geldiği rekabetçi bir nişancı oyunudur.|Maçlarda takımlar belirli hedefleri tamamlamaya veya rakip takımın planını engellemeye çalışır.|Oyunun temelinde takım çalışması, harita bilgisi ve doğru karar verme bulunur.","Her raund başladığında takımının görevine göre hareket edersin.|Haritadaki bölgeleri kontrol etmek ve takım arkadaşlarınla birlikte oynamak önemlidir.|Maç ilerledikçe kazandığın oyun içi parayla ekipman seçimi yaparsın.","Rekabetçi ve rahat oyun seçenekleri bulunur.|Farklı haritalarda takım karşılaşmaları yapılır.|Silah kontrolü ve takım koordinasyonu oyunun önemli parçalarıdır.","Çok oyunculu takım oyunu"],
-["Fortnite","Aksiyon","PC ve Konsol","🪂",2017,"https://www.fortnite.com/","Fortnite, farklı oyun modları sunan çevrim içi bir oyun dünyasıdır.|Battle Royale modunda oyuncular büyük bir adaya iner ve maçta sona kalmaya çalışır.|Bunun yanında yaratıcı içerikler ve farklı oyuncu yapımı deneyimler de bulunur.","Maç başladığında haritaya inerek ekipman ve kaynak toplarsın.|Haritayı keşfederken güvenli bölgede kalmaya ve rakipleri takip etmeye çalışırsın.|İnşa özelliğinin bulunduğu modlarda topladığın malzemelerle yapılar oluşturabilirsin.","Battle Royale ve takım seçenekleri bulunur.|Yaratıcı modda kendi oyun deneyimlerini keşfedebilirsin.|Etkinlikler ve dönemsel içerikler oyuna yenilik katar.","Tek ve çok oyunculu modlar"],
-["Roblox","Simülasyon","PC ve Mobil","🧱",2006,"https://www.roblox.com/","Roblox, kullanıcıların kendi oyunlarını oluşturabildiği ve başkalarının hazırladığı deneyimleri oynayabildiği bir platformdur.|Platformda macera, yarış, rol yapma, simülasyon ve bulmaca gibi çok farklı türler bulunur.|Her deneyimin kuralları, amacı ve oynanış sistemi birbirinden farklı olabilir.","Önce ilgini çeken bir deneyim seçerek oyuna girersin.|Deneyimin sunduğu görevleri, kontrolleri ve kuralları öğrenerek ilerlersin.|Bazı oyunlarda arkadaşlarınla takım kurabilir, bazılarında kendi karakterini veya alanını geliştirebilirsin.","Binlerce farklı kullanıcı yapımı deneyim bulunur.|Avatarını farklı görünümlerle kişiselleştirebilirsin.|Bazı deneyimler tek başına, bazıları arkadaşlarla oynanabilir.","Deneyime göre değişir"],
-["Minecraft","Hayatta Kalma","PC ve Mobil","⛏️",2011,"https://www.minecraft.net/","Minecraft, bloklardan oluşan geniş bir dünyada keşif ve üretim yapabildiğin bir sandbox oyunudur.|Hayatta Kalma modunda kaynak toplar, araç üretir ve kendine güvenli bir alan kurarsın.|Yaratıcı modda ise kaynak sınırı olmadan yapılar ve farklı tasarımlar oluşturabilirsin.","Ağaç, taş ve farklı kaynakları toplayarak temel araçlarını üretirsin.|Dünyayı keşfederken mağaralar, köyler ve farklı biyomlarla karşılaşırsın.|İlerledikçe daha gelişmiş eşyalar üretip kendi projelerini tamamlayabilirsin.","Hayatta Kalma ve Yaratıcı modları bulunur.|Tek başına veya çok oyunculu sunucularda oynanabilir.|İnşa, keşif, üretim ve macera bir arada bulunur.","Tek ve çok oyunculu"],
-["Brawlhalla","Aksiyon","PC ve Konsol","🥊",2017,"https://www.brawlhalla.com/","Brawlhalla, farklı karakterlerin arenalarda karşılaştığı ücretsiz bir platform dövüş oyunudur.|Her karakterin kullanabildiği farklı silahlar ve dövüş tarzları vardır.|Amaç rakiplerini arenanın dışına çıkararak karşılaşmayı kazanmaktır.","Bir karakter seçerek arenaya girersin.|Rakibinin hareketlerini takip eder, saldırı ve savunma zamanlamasını ayarlarsın.|Farklı silahları deneyerek sana uygun karakteri bulabilirsin.","Tek başına ve takım hâlinde oynanabilen modlar bulunur.|Farklı karakterler ve silah seçenekleri vardır.|Çevrim içi karşılaşmalar ve yerel oyun seçenekleri sunar.","Tek ve çok oyunculu"],
-["Rocket League","Yarış","PC ve Konsol","🚗",2015,"https://www.rocketleague.com/","Rocket League, futbolu roket destekli arabalarla birleştiren rekabetçi bir oyundur.|Oyuncular araçlarını kullanarak büyük topu rakip kaleye göndermeye çalışır.|Hız, yön kontrolü ve takım arkadaşlarıyla uyum oyunun temel parçalarıdır.","Aracını hızlandırır, zıplar ve topa doğru zamanda temas etmeye çalışırsın.|Sahada hem hücum hem savunma görevlerini üstlenebilirsin.|Havada hareket etmeyi öğrenmek daha zor toplara ulaşmana yardımcı olur.","Bire bir, ikili ve üçlü takım karşılaşmaları bulunur.|Araç görünümünü farklı kozmetiklerle değiştirebilirsin.|Antrenman alanlarında sürüş ve top kontrolü çalışabilirsin.","Çok oyunculu"],
-["League of Legends","Strateji","PC","⚔️",2009,"https://www.leagueoflegends.com/","League of Legends, iki takımın birbirinin üssünü yok etmeye çalıştığı bir MOBA oyunudur.|Oyuncular farklı yeteneklere sahip şampiyonlardan birini seçer.|Haritadaki koridorlar, orman alanı ve takım hedefleri maçın gidişatını etkiler.","Maç başında bir şampiyon seçerek takımındaki rolünü üstlenirsin.|Rakip minyonları ve rakip oyuncuları takip ederek altın ve deneyim kazanırsın.|Takımınla birlikte kuleleri ve önemli harita hedeflerini ele geçirmeye çalışırsın.","Farklı şampiyonlar ve oyun tarzları bulunur.|Dereceli ve normal karşılaşmalar sunulur.|Takım uyumu ve harita kontrolü önemlidir.","Çok oyunculu takım oyunu"],
-["Teamfight Tactics","Strateji","PC ve Mobil","♟️",2019,"https://teamfighttactics.leagueoflegends.com/","Teamfight Tactics, otomatik savaşlara dayanan bir strateji oyunudur.|Oyuncular farklı özelliklere sahip birimlerden takım kurar ve güçlü kombinasyonlar oluşturmaya çalışır.|Her turda rakiplerin dizilimlerine göre planını değiştirebilirsin.","Maç boyunca mağazadan birimler seçerek takımını güçlendirirsin.|Birimleri tahtaya yerleştirirken konumlarını ve özellik uyumlarını hesaba katarsın.|Kazandığın veya kaybettiğin turlara göre stratejini yeniden düzenlersin.","Farklı setler ve dönemsel birim kombinasyonları bulunur.|Her maçta farklı takım dizilimleri deneyebilirsin.|Rakiplerin hamlelerini izlemek stratejini geliştirmene yardımcı olur.","Çok oyunculu"],
-["Paladins","FPS","PC ve Konsol","🛡️",2018,"https://store.steampowered.com/app/444090/Paladins/","Paladins, farklı yeteneklere sahip şampiyonların takım hâlinde mücadele ettiği bir kahraman nişancı oyunudur.|Her şampiyonun kendine özgü silahları ve becerileri vardır.|Takımın hedefleri ele geçirmeye ve rakiplerini durdurmaya çalışır.","Maç öncesinde oynamak istediğin şampiyonu seçersin.|Savaş sırasında karakterinin yeteneklerini takımının ihtiyacına göre kullanırsın.|Takımındaki diğer rollerle uyumlu hareket etmek maçın sonucunu etkiler.","Farklı şampiyonlar ve oyun tarzları bulunur.|Takım karşılaşmaları ve hedef odaklı modlar sunar.|Karakter geliştirme seçenekleri oynanışı çeşitlendirir.","Çok oyunculu takım oyunu"],
-["Warframe","Aksiyon","PC ve Konsol","🤖",2013,"https://www.warframe.com/","Warframe, bilim kurgu evreninde geçen çevrim içi bir aksiyon oyunudur.|Oyuncular Warframe adı verilen zırhlı savaşçıları kontrol eder.|Görevler tamamlandıkça yeni ekipmanlar, karakterler ve geliştirmeler açılır.","Görev haritasından bir görev seçerek maceraya başlarsın.|Hareket, yakın dövüş ve farklı yetenekleri birlikte kullanabilirsin.|Topladığın kaynaklarla ekipmanlarını geliştirerek daha zorlu görevlere hazırlanırsın.","Çok sayıda Warframe ve ekipman seçeneği bulunur.|Tek başına veya arkadaşlarınla görev yapabilirsin.|Hikâye görevleri ve çevrim içi etkinlikler sunulur.","Tek ve çok oyunculu"],
-["The Sims 4","Simülasyon","PC ve Konsol","🏡",2014,"https://www.ea.com/games/the-sims/the-sims-4","The Sims 4, sanal karakterlerin günlük yaşamlarını yönettiğin bir yaşam simülasyonudur.|Kendi Sim karakterlerini oluşturabilir, evler tasarlayabilir ve onların hayatlarına yön verebilirsin.|Oyunda kariyer, arkadaşlık, aile ve ev dekorasyonu gibi birçok sistem bulunur.","Önce karakterinin görünüşünü ve özelliklerini belirlersin.|Ardından bir ev seçer veya sıfırdan kendi evini inşa edersin.|Karakterinin ihtiyaçlarını, ilişkilerini ve günlük planını yöneterek hikâyesini oluşturursun.","Karakter oluşturma ve ev tasarlama araçları bulunur.|Farklı kariyerler ve sosyal ilişkiler deneyebilirsin.|Ek paketler yeni içerikler ekleyebilir.","Tek oyunculu"],
-["Trackmania","Yarış","PC","🏎️",2020,"https://www.trackmania.com/","Trackmania, kısa ama zorlu parkurlarda en iyi süreyi yapmaya çalıştığın bir yarış oyunudur.|Pistlerde rampalar, keskin dönüşler ve farklı yüzeyler bulunur.|Küçük sürüş hataları bile bitiş zamanını etkileyebilir.","Aracını kontrol ederek parkurun başlangıcından bitişine ulaşmaya çalışırsın.|Virajlara uygun hızla girmek ve rampalarda doğru yönü korumak önemlidir.|Aynı parkuru tekrar oynayarak daha iyi bir süre elde edebilirsin.","Zaman odaklı yarışlar sunar.|Oyuncular kendi pistlerini oluşturabilir.|Liderlik tablolarında diğer oyuncuların süreleriyle karşılaştırma yapabilirsin.","Tek ve çok oyunculu"],
-["Unturned","Hayatta Kalma","PC","🧟",2017,"https://store.steampowered.com/app/304930/Unturned/","Unturned, zombilerin bulunduğu bir dünyada hayatta kalmaya çalıştığın açık dünya oyunudur.|Kaynak bulmak, yiyecek ve ekipman yönetmek oyunun önemli parçalarıdır.|Dünyayı keşfederken terk edilmiş yerlerde farklı eşyalar bulabilirsin.","Çevreden temel kaynakları toplayarak başlarsın.|Güvenli bir yer bulup barınak oluşturabilir ve gerekli eşyaları üretebilirsin.|Haritayı keşfettikçe daha gelişmiş ekipmanlara ve yeni bölgelere ulaşabilirsin.","Tek oyunculu ve çok oyunculu seçenekleri bulunur.|Üretim ve üs kurma sistemleri vardır.|Topluluk sunucuları farklı oyun deneyimleri sunabilir.","Tek ve çok oyunculu"],
-["Apex Legends","FPS","PC ve Konsol","🚀",2019,"https://www.ea.com/games/apex-legends","Apex Legends, özel yetenekleri bulunan karakterlerin mücadele ettiği takım tabanlı bir Battle Royale oyunudur.|Oyuncular farklı karakterlerden oluşan takımlarla geniş haritalara iner.|Takımınla birlikte ekipman bulur ve maçta sona kalmaya çalışırsın.","Maç öncesinde karakterini seçerek takımındaki rolünü belirlersin.|Haritada ekipman toplar ve takım arkadaşlarınla birlikte hareket edersin.|Karakterinin özel yeteneklerini doğru zamanda kullanmak takımına avantaj sağlayabilir.","Farklı karakterler ve yetenekler bulunur.|Takım tabanlı karşılaşmalar sunar.|Haritalar ve dönemsel içerikler oynanışı çeşitlendirir.","Çok oyunculu"],
-["Genshin Impact","RPG","PC ve Mobil","🌄",2020,"https://genshin.hoyoverse.com/","Genshin Impact, Teyvat isimli fantastik bir dünyada geçen açık dünya rol yapma oyunudur.|Oyuncu, kaybolan yakınını arayan Gezgin karakterini kontrol eder.|Farklı bölgeleri keşfederken yeni karakterlerle tanışır ve hikâyenin parçalarını öğrenirsin.","Dünyada yürüyerek, tırmanarak ve farklı yollarla keşif yaparsın.|Karakterlerin element yeteneklerini birleştirerek savaşlarda farklı kombinasyonlar kullanırsın.|Görevleri tamamladıkça yeni bölgeler ve hikâye bölümleri açılır.","Geniş keşif alanları ve farklı elementler bulunur.|Birden fazla karakterden takım kurabilirsin.|Hikâye görevleri, bulmacalar ve etkinlikler sunulur.","Tek oyunculu ağırlıklı, çevrim içi özellikli"],
-["Honkai: Star Rail","RPG","PC ve Mobil","🚆",2023,"https://hsr.hoyoverse.com/","Honkai: Star Rail, uzay yolculuğu temalı sıra tabanlı bir rol yapma oyunudur.|Astral Express ekibiyle farklı gezegenleri ve istasyonları ziyaret edersin.|Her bölgede yeni karakterler, hikâyeler ve gizemlerle karşılaşırsın.","Takımına farklı rollere sahip karakterler yerleştirirsin.|Savaşlarda karakterlerin sırasını ve yeteneklerini planlayarak hamle yaparsın.|Görevleri tamamlayıp karakterlerini geliştirerek yeni bölümlere ilerlersin.","Sıra tabanlı savaş sistemi bulunur.|Farklı gezegenlerde hikâye görevleri sunulur.|Karakter geliştirme ve takım kurma önemli yer tutar.","Tek oyunculu ağırlıklı"],
-["Fall Guys","Platform","PC ve Konsol","🍬",2020,"https://www.fallguys.com/","Fall Guys, renkli engelli parkurlarda diğer oyuncularla yarıştığın eğlenceli bir platform oyunudur.|Her turda farklı bir parkur veya mini oyunla karşılaşırsın.|Amaç eleme turlarını geçerek final bölümüne ulaşmaktır.","Karakterini yönlendirerek zıplar, koşar ve engellerin arasından geçersin.|Diğer oyuncularla aynı parkurda ilerlerken doğru zamanlamayı bulman gerekir.|Turun sonunda yeterli başarıyı elde edersen sonraki aşamaya geçersin.","Farklı mini oyunlar ve parkurlar bulunur.|Arkadaşlarla takım hâlinde oynanabilir.|Kostüm ve görünüm seçenekleri vardır.","Çok oyunculu"],
-["Stumble Guys","Platform","PC ve Mobil","🏃",2021,"https://www.stumbleguys.com/","Stumble Guys, çok sayıda oyuncunun aynı engelli parkurlarda yarıştığı çevrim içi bir oyundur.|Parkurlar hareketli engeller, dar geçitler ve farklı zorluklar içerir.|Her turda elenmeden ilerleyerek son aşamaya ulaşmaya çalışırsın.","Karakterini koşma, zıplama ve hareket kontrolleriyle yönlendirirsin.|Parkurdaki engelleri takip ederek doğru zamanda hareket etmen gerekir.|Turları geçtikçe daha az oyuncuyla karşılaşırsın.","Çok oyunculu yarışlar bulunur.|Farklı parkurlar ve mini oyunlar sunar.|Karakter görünümünü değiştirebilirsin.","Çok oyunculu"],
-["Portal 2","Bulmaca","PC","🌀",2011,"https://store.steampowered.com/app/620/Portal_2/","Portal 2, fizik tabanlı bulmacalar çözdüğün birinci şahıs macera oyunudur.|Portal cihazı sayesinde iki farklı yüzey arasında geçitler açabilirsin.|Hikâye boyunca test odalarını geçerken çevredeki mekanizmaları anlaman gerekir.","Portal açabileceğin yüzeyleri inceleyerek çözüm ararsın.|Nesneleri taşıyabilir, düğmeleri etkinleştirebilir ve geçitleri kullanarak farklı alanlara ulaşabilirsin.|İlerleyen bölümlerde bulmacalar daha fazla düşünme ve planlama gerektirir.","Tek oyunculu hikâye modu bulunur.|İki kişilik iş birliği bölümleri vardır.|Fizik ve mantık temelli bulmacalar içerir.","Tek ve iki oyunculu"],
-["Hollow Knight","Aksiyon","PC","🐞",2017,"https://www.hollowknight.com/","Hollow Knight, Hallownest isimli yeraltı krallığında geçen keşif ve aksiyon oyunudur.|Oyuncu, terk edilmiş krallığın sırlarını öğrenmek için farklı bölgeleri dolaşır.|Yolculuk sırasında yeni karakterlerle ve zorlu düşmanlarla karşılaşır.","Haritada yeni alanları keşfederek ilerlersin.|Dövüşlerde saldırı ve kaçınma zamanlamasını kullanırsın.|Yeni yetenekler kazandıkça daha önce ulaşamadığın bölgelere geri dönebilirsin.","Geniş ve birbirine bağlı bir dünya bulunur.|Farklı düşmanlar ve bölüm sonu mücadeleleri vardır.|Keşif ve karakter gelişimi önemli yer tutar.","Tek oyunculu"],
-["Celeste","Platform","PC","🏔️",2018,"https://www.celestegame.com/","Celeste, Madeline isimli karakterin Celeste Dağı'na tırmanma yolculuğunu anlatan bir platform oyunudur.|Dağ boyunca farklı engeller ve zorlu platform bölümleriyle karşılaşırsın.|Hikâye, karakterin yolculuğunu ve karşılaştığı zorlukları takip eder.","Zıplama, tırmanma ve havada yön değiştirme hareketlerini kullanırsın.|Her bölümde platformların konumunu ve hareket zamanını dikkatle takip etmen gerekir.|Kontrolleri öğrendikçe daha zor bölümleri tamamlayabilirsin.","Hikâye odaklı tek oyunculu deneyim sunar.|Gizli alanlar ve ek bölümler bulunur.|Hassas platform kontrolleri oyunun temelidir.","Tek oyunculu"],
-["Slime Rancher","Simülasyon","PC","🟢",2017,"https://www.slimerancher.com/","Slime Rancher, uzak bir gezegende çiftlik kurduğun renkli bir simülasyon oyunudur.|Beatrix LeBeau isimli karakterle farklı slime türlerini keşfedersin.|Slime'ları besleyerek ve topladıkları ürünleri değerlendirerek çiftliğini büyütürsün.","Gezegende dolaşarak farklı slime türlerini bulursun.|Onları çiftliğine getirip uygun alanlarda besleyebilir ve bakımını yapabilirsin.|Kazandığın kaynaklarla yeni alanlar ve ekipmanlar açarsın.","Farklı slime türleri bulunur.|Çiftlik kurma ve keşif sistemleri vardır.|Renkli ve rahat tempolu bir oynanış sunar.","Tek oyunculu"],
-["Human: Fall Flat","Bulmaca","PC ve Konsol","🧍",2016,"https://www.humanfallflat.com/","Human: Fall Flat, fizik tabanlı bulmacalar ve komik karakter hareketleri üzerine kuruludur.|Bob isimli karakterle farklı rüya benzeri alanları keşfedersin.|Her bölümde çevredeki nesneleri kullanarak çıkış yolunu bulman gerekir.","Karakterinin kollarını kullanarak nesneleri tutar, iter ve taşırısın.|Kutuları, platformları ve mekanizmaları bir araya getirerek bulmacaları çözersin.|Bazı bölümlerde birden fazla çözüm yolu bulabilirsin.","Tek oyunculu ve çok oyunculu oynanabilir.|Fizik tabanlı etkileşimler içerir.|Arkadaşlarla birlikte bulmaca çözmek mümkündür.","Tek ve çok oyunculu"],
-["Bloons TD 6","Strateji","PC ve Mobil","🎈",2018,"https://www.ninjakiwi.com/","Bloons TD 6, balonların haritadaki yolun sonuna ulaşmasını engellemeye çalıştığın bir kule savunma oyunudur.|Maymun kuleleri farklı saldırı ve destek özelliklerine sahiptir.|Dalgalar ilerledikçe balonlar daha dayanıklı hâle gelir ve stratejini geliştirmen gerekir.","Haritanın uygun noktalarına kuleler yerleştirirsin.|Kazandığın oyun içi kaynaklarla kulelerini geliştirerek yeni özellikler açarsın.|Balonların türüne ve haritanın yapısına göre savunmanı planlarsın.","Çok sayıda kule ve geliştirme seçeneği bulunur.|Farklı haritalar ve zorluk seviyeleri vardır.|Tek başına veya iş birliği seçenekleriyle oynanabilir.","Tek ve çok oyunculu"],
-["Plants vs. Zombies","Strateji","PC ve Mobil","🌻",2009,"https://www.ea.com/games/plants-vs-zombies","Plants vs. Zombies, bahçeni zombilere karşı korumaya çalıştığın bir kule savunma oyunudur.|Her bitkinin farklı bir savunma veya saldırı özelliği vardır.|Zombiler bahçene ulaşmadan önce doğru bitki dizilimini oluşturman gerekir.","Güneş toplayarak yeni bitkiler yerleştirirsin.|Her bitkinin hangi koridorda daha etkili olacağını düşünerek seçim yaparsın.|Bölümler ilerledikçe farklı özelliklere sahip zombilerle karşılaşırsın.","Farklı bitki ve zombi türleri bulunur.|Bölüm bölüm ilerleyen bir macera sunar.|Strateji ve kaynak yönetimi önemlidir.","Tek oyunculu"],
-["Geometry Dash","Platform","PC ve Mobil","🔷",2013,"https://www.robtopgames.com/","Geometry Dash, müziğin ritmine göre engelleri aşmaya çalıştığın bir platform oyunudur.|Oyuncu geometrik bir simgeyi kontrol ederek seviyenin sonuna ulaşmaya çalışır.|Her bölüm farklı engel düzenleri ve müzik ritimleri içerir.","Karakterin ilerlerken doğru zamanlarda zıplaman gerekir.|Engellerin sırasını öğrenmek ve ritme dikkat etmek bölümleri geçmene yardımcı olur.|Seviyeleri tekrar deneyerek hareketlerini geliştirebilirsin.","Farklı zorluklarda seviyeler bulunur.|Oyuncular kendi seviyelerini tasarlayabilir.|Ritim ve zamanlama oyunun temelidir.","Tek oyunculu ve topluluk içerikleri"],
-["Don't Starve Together","Hayatta Kalma","PC","🔥",2016,"https://www.klei.com/games/dont-starve-together","Don't Starve Together, tuhaf yaratıklarla dolu bir dünyada hayatta kalmaya çalıştığın bir oyundur.|Dünyada yiyecek bulmak, kaynak toplamak ve hava koşullarına hazırlanmak önemlidir.|Arkadaşlarınla birlikte oynayarak ortak bir kamp kurabilirsin.","İlk günlerde yiyecek ve temel kaynaklar toplamaya odaklanırsın.|Gece için ışık ve güvenli bir kamp hazırlaman gerekir.|Mevsimler değiştikçe ihtiyaçlarını ve kamp düzenini yeniden planlarsın.","Birden fazla karakter seçeneği bulunur.|Tek başına veya arkadaşlarla oynanabilir.|Üretim, keşif ve kaynak yönetimi içerir.","Tek ve çok oyunculu"],
-["PowerWash Simulator","Simülasyon","PC","🧽",2022,"https://www.futurlab.co.uk/","PowerWash Simulator, basınçlı su kullanarak farklı alanları temizlediğin bir simülasyon oyunudur.|Görevlerde evler, araçlar ve çeşitli nesneler temizlenmeyi bekler.|Her işi tamamladığında yeni görevler ve ekipman seçenekleri açılabilir.","Temizlemek istediğin alanı seçerek su püskürtmeye başlarsın.|Kirli bölgeleri farklı açılardan kontrol ederek tüm lekeleri bulmaya çalışırsın.|Görev tamamlandığında yeni işlere geçebilirsin.","Farklı temizlik görevleri bulunur.|Ekipman seçenekleri geliştirilebilir.|Rahat tempolu bir oynanış sunar.","Tek ve iş birliği"],
-["Euro Truck Simulator 2","Simülasyon","PC","🚛",2012,"https://eurotrucksimulator2.com/","Euro Truck Simulator 2, Avrupa yollarında yük taşıdığın bir kamyon simülasyonudur.|Farklı şehirler arasında teslimatlar yaparak kendi nakliye işini büyütürsün.|Yol kurallarına, yakıta ve teslimat zamanına dikkat etmen gerekir.","Bir teslimat işi seçip yükünü alırsın.|Kamyonunu kullanarak şehirler ve otoyollar arasında yolculuk yaparsın.|Kazandığın parayla kamyonunu geliştirebilir ve yeni araçlar alabilirsin.","Geniş yol ağı ve farklı şehirler bulunur.|Kamyon özelleştirme seçenekleri vardır.|Tek oyunculu sürüş ve şirket yönetimi sunar.","Tek oyunculu"],
-["Stardew Valley","Simülasyon","PC ve Mobil","🌾",2016,"https://www.stardewvalley.net/","Stardew Valley, eski bir çiftliği devralarak yeni bir yaşam kurduğun bir simülasyon oyunudur.|Kasabadaki insanlarla tanışabilir ve kendi çiftliğini geliştirebilirsin.|Mevsimler, etkinlikler ve keşfedilecek alanlar oyunun dünyasını canlı tutar.","Toprağı temizleyip ekin ekerek çiftliğini düzenlersin.|Balık tutabilir, madenleri keşfedebilir ve hayvan yetiştirebilirsin.|Kazandığın parayla araçlarını ve çiftlik binalarını geliştirebilirsin.","Çiftçilik, madencilik ve balıkçılık bulunur.|Kasaba halkıyla ilişkiler kurabilirsin.|Tek başına veya çok oyunculu oynanabilir.","Tek ve çok oyunculu"],
-["Terraria","Hayatta Kalma","PC ve Mobil","⛏️",2011,"https://terraria.org/","Terraria, keşif, üretim ve macera içeren 2D bir sandbox oyunudur.|Dünyanın altında ve üstünde farklı bölgeler, kaynaklar ve yaratıklar bulunur.|Yeni ekipmanlar üretip daha zorlu alanları keşfederek ilerlersin.","İlk olarak temel araçları ve barınağını hazırlarsın.|Madenlere inerek cevher toplar ve daha güçlü ekipmanlar üretirsin.|Keşfettiğin bölgelerde yeni düşmanlar ve bölüm sonu mücadeleleriyle karşılaşırsın.","Geniş üretim sistemi bulunur.|Farklı biyomlar ve keşif alanları vardır.|Tek başına veya arkadaşlarınla oynayabilirsin.","Tek ve çok oyunculu"],
-["Among Us","Aksiyon","PC ve Mobil","🚀",2018,"https://www.innersloth.com/games/among-us/","Among Us, mürettebat üyelerinin görevleri tamamlamaya çalıştığı sosyal çıkarım oyunudur.|Oyuncuların arasına gizlenmiş sahtekârlar bulunur ve kim olduklarını anlamaya çalışırsın.|Toplantılarda konuşarak şüpheli davranışları değerlendirirsin.","Mürettebattaysan haritadaki görevleri tamamlamaya çalışırsın.|Sahtekâr rolündeysen kimliğini belli etmeden oyunun hedeflerini gerçekleştirmeye çalışırsın.|Toplantılarda diğer oyuncuların söylediklerini değerlendirerek karar verirsin.","Farklı haritalar ve görevler bulunur.|Arkadaşlarla özel odalar kurulabilir.|İletişim ve dikkat oyunun temel parçalarıdır.","Çok oyunculu"],
-["The Forest","Hayatta Kalma","PC","🌲",2018,"https://endnightgames.com/","The Forest, uçak kazasının ardından gizemli bir ormanda hayatta kalmaya çalıştığın bir oyundur.|Ormanı keşfederken kaynak toplar ve kendine barınak hazırlarsın.|Çevredeki mağaralar ve yapılar hikâyenin gizemlerini anlamana yardımcı olur.","Ağaç, taş ve yiyecek gibi kaynakları toplarsın.|Güvenli bir kamp kurarak barınma ve üretim ihtiyaçlarını düzenlersin.|Haritayı keşfettikçe yeni alanlar ve hikâyeyle ilgili ipuçları bulursun.","Keşif ve üretim sistemi bulunur.|Tek başına veya arkadaşlarla oynanabilir.|Hikâye ve hayatta kalma unsurları bir aradadır.","Tek ve çok oyunculu"],
-["Dead Cells","Aksiyon","PC","⚔️",2018,"https://dead-cells.com/","Dead Cells, sürekli değişen bölümlerde ilerlediğin hızlı tempolu bir aksiyon platform oyunudur.|Oyuncu farklı silahlar ve yetenekler kullanarak düşmanlarla mücadele eder.|Her denemede farklı ekipmanlar bulabilir ve yeni yollar keşfedebilirsin.","Bölümlerde ilerlerken düşmanların hareketlerini öğrenirsin.|Silah ve yeteneklerini oyun tarzına göre seçersin.|Yeni geliştirmeler açıldıkça daha önce ulaşamadığın bölgelere gidebilirsin.","Hızlı dövüş sistemi bulunur.|Farklı silah ve yetenek seçenekleri vardır.|Tekrar oynanabilirliği yüksek bir yapı sunar.","Tek oyunculu"],
-["Cuphead","Aksiyon","PC","☕",2017,"https://www.cupheadgame.com/","Cuphead, eski çizgi filmlerden esinlenen görsel tasarıma sahip bir aksiyon oyunudur.|Cuphead ve Mugman karakterleri farklı bölüm sonu düşmanlarıyla karşılaşır.|Her mücadelede düşmanın hareketlerini öğrenmek ve doğru zamanı beklemek gerekir.","Karakterini hareket ettirerek saldırılardan kaçınır ve karşılık verirsin.|Her bölüm sonu mücadelesinin kendine özgü hareketleri bulunur.|Denemeler yaptıkça saldırı düzenlerini öğrenip bölümü tamamlayabilirsin.","Çizgi film tarzı animasyonlar bulunur.|Tek başına veya iki kişi oynanabilir.|Zorlu bölüm sonu mücadeleleri içerir.","Tek ve iki oyunculu"],
-["Hades","Aksiyon","PC","🏛️",2020,"https://www.supergiantgames.com/games/hades/","Hades, yeraltı dünyasından çıkmaya çalışan Zagreus'un hikâyesini anlatır.|Yolculuk sırasında Yunan mitolojisinden karakterlerle tanışırsın.|Her denemede farklı güçler kazanarak ilerlemeye çalışırsın.","Silahını seçerek farklı odalardan geçersin.|Karşılaştığın karakterlerden güçler alarak saldırılarını çeşitlendirirsin.|Her deneme sonunda yeni hikâye ayrıntıları ve geliştirmeler açılabilir.","Farklı silahlar ve güç kombinasyonları bulunur.|Hikâye karakterlerle kurulan ilişkiler üzerinden ilerler.|Tek oyunculu aksiyon deneyimi sunar.","Tek oyunculu"],
-["Left 4 Dead 2","FPS","PC","🧟",2009,"https://store.steampowered.com/app/550/Left_4_Dead_2/","Left 4 Dead 2, dört kişilik bir ekibin zombi istilasından kurtulmaya çalıştığı takım nişancı oyunudur.|Oyuncular farklı bölümlerde güvenli noktalara ulaşmak için birlikte ilerler.|Takım arkadaşlarına yardım etmek ve kaynakları paylaşmak önemlidir.","Bir karakter seçerek bölümdeki ekibinle ilerlersin.|Yol boyunca malzeme ve sağlık eşyalarını takip edersin.|Takım arkadaşlarından uzaklaşmadan bölümün sonundaki güvenli alana ulaşmaya çalışırsın.","Hikâye bölümleri ve farklı karşılaşma seçenekleri bulunur.|Dört kişilik iş birliği temel oynanışın merkezindedir.|Farklı karakterler ve bölümler sunar.","Tek ve çok oyunculu"],
-["Team Fortress 2","FPS","PC","🎩",2007,"https://www.teamfortress.com/","Team Fortress 2, farklı sınıfların görevlerine dayanan takım tabanlı bir nişancı oyunudur.|Her sınıf takım içinde farklı bir rol üstlenir.|Takımın hedefleri tamamlamak için sınıflar arasında denge kurmaya çalışır.","Maçtan önce oynamak istediğin sınıfı seçersin.|Sınıfının görevine göre takımına destek verir veya hedefleri korursun.|Haritanın amacını takip ederek takım arkadaşlarınla birlikte hareket edersin.","Birden fazla karakter sınıfı bulunur.|Farklı hedef odaklı oyun modları vardır.|Karakter görünümünü değiştiren eşyalar bulunur.","Çok oyunculu takım oyunu"],
-["Dota 2","Strateji","PC","🧙",2013,"https://www.dota2.com/","Dota 2, iki takımın rakip üssünü yok etmeye çalıştığı rekabetçi bir MOBA oyunudur.|Her oyuncu farklı yeteneklere sahip bir kahraman seçer.|Haritadaki koridorlar, orman alanı ve takım hedefleri maçın önemli parçalarıdır.","Kahramanını seçtikten sonra takımındaki rolünü üstlenirsin.|Rakip birimleri ve oyuncuları takip ederek deneyim ve kaynak kazanırsın.|Eşyalarını ve yeteneklerini maçın gidişatına göre geliştirirsin.","Çok sayıda kahraman bulunur.|Takım stratejisi ve harita kontrolü önemlidir.|Rekabetçi ve normal karşılaşmalar sunar.","Çok oyunculu takım oyunu"],
-["PUBG: Battlegrounds","Hayatta Kalma","PC ve Konsol","🪂",2017,"https://pubg.com/","PUBG: Battlegrounds, geniş haritalarda oyuncuların hayatta kalmaya çalıştığı bir Battle Royale oyunudur.|Maç boyunca haritadaki güvenli alan değişir ve oyuncuların hareket etmesi gerekir.|Tek başına veya takım arkadaşlarınla maçın sonuna ulaşmaya çalışırsın.","Maç başında haritaya iniş yapacağın yeri seçersin.|Binaları ve çevreyi keşfederek ekipman toplarsın.|Güvenli alanı takip edip takımınla birlikte maçın sonuna ulaşmaya çalışırsın.","Farklı haritalar ve takım seçenekleri bulunur.|Araçlarla haritada yolculuk yapılabilir.|Çevrim içi rekabetçi karşılaşmalar sunar.","Tek ve çok oyunculu"],
-["Overwatch 2","FPS","PC ve Konsol","🦸",2023,"https://overwatch.blizzard.com/","Overwatch 2, farklı yeteneklere sahip kahramanların takım hâlinde mücadele ettiği bir nişancı oyunudur.|Kahramanlar tank, hasar ve destek gibi farklı rollere ayrılır.|Takımlar haritadaki hedefleri ele geçirmek veya korumak için birlikte çalışır.","Maçtan önce takımına uygun bir kahraman seçersin.|Rolünün görevini yerine getirirken yeteneklerini doğru zamanda kullanırsın.|Takım arkadaşlarınla uyumlu hareket ederek hedefe ulaşmaya çalışırsın.","Farklı kahramanlar ve roller bulunur.|Hedef odaklı takım modları sunar.|Karakterlerin yetenekleri oynanış çeşitliliği sağlar.","Çok oyunculu takım oyunu"],
-["Destiny 2","FPS","PC ve Konsol","🚀",2017,"https://www.destinythegame.com/","Destiny 2, bilim kurgu evreninde geçen çevrim içi aksiyon ve nişancı oyunudur.|Oyuncular Muhafız karakterlerini geliştirerek farklı gezegenlerde görevler yapar.|Hikâye görevleri, keşif alanları ve takım etkinlikleri bulunur.","Bir Muhafız sınıfı seçerek maceraya başlarsın.|Görevleri tamamlayıp ekipman ve geliştirmeler toplarsın.|Daha zorlu etkinliklerde arkadaşlarınla takım kurabilirsin.","Farklı karakter sınıfları bulunur.|Hikâye ve çevrim içi etkinlikler sunar.|Ekipman toplama ve karakter geliştirme sistemi vardır.","Tek ve çok oyunculu"],
-["War Thunder","Simülasyon","PC ve Konsol","✈️",2013,"https://warthunder.com/","War Thunder, farklı dönemlere ait hava, kara ve deniz araçlarını kullandığın çevrim içi bir araç oyunudur.|Oyunda çeşitli araç türleri ve farklı savaş alanları bulunur.|Araçların özelliklerini öğrenmek ve takımınla hareket etmek önemlidir.","Bir araç seçerek karşılaşmaya katılırsın.|Haritayı ve görev hedeflerini takip ederek takımına katkı sağlamaya çalışırsın.|Oyun ilerledikçe farklı araçlar açabilir ve koleksiyonunu genişletebilirsin.","Hava, kara ve deniz araçları bulunur.|Farklı dönemlerden araçlar sunar.|Çevrim içi karşılaşmalar içerir.","Çok oyunculu"],
-["World of Tanks","Aksiyon","PC","🚜",2010,"https://worldoftanks.com/","World of Tanks, takım hâlinde tank karşılaşmalarına katıldığın çevrim içi bir oyundur.|Farklı tank türleri farklı hareket ve dayanıklılık özelliklerine sahiptir.|Haritanın yapısını kullanarak takımına destek olursun.","Bir tank seçerek takım karşılaşmasına girersin.|Haritadaki konumları takip eder ve takımının hedeflerine göre ilerlersin.|Maçlardan kazandığın kaynaklarla araçlarını geliştirebilirsin.","Farklı tank sınıfları bulunur.|Araç geliştirme sistemi vardır.|Takım tabanlı harita karşılaşmaları sunar.","Çok oyunculu"],
-["World of Warships","Aksiyon","PC","🚢",2015,"https://worldofwarships.com/","World of Warships, farklı savaş gemileriyle deniz karşılaşmalarına katıldığın çevrim içi bir oyundur.|Gemilerin hız, menzil ve kullanım özellikleri birbirinden farklıdır.|Takımınla birlikte haritadaki hedefleri kontrol etmeye çalışırsın.","Bir gemi seçerek karşılaşmaya katılırsın.|Denizdeki konumunu ve takım hedeflerini takip ederek hareket edersin.|Maçlardan elde ettiğin ilerlemeyle yeni gemiler açabilirsin.","Farklı gemi türleri bulunur.|Takım karşılaşmaları ve çeşitli haritalar sunar.|Gemi geliştirme sistemi vardır.","Çok oyunculu"],
-["Path of Exile","RPG","PC","💎",2013,"https://www.pathofexile.com/","Path of Exile, karanlık fantastik bir dünyada geçen aksiyon rol yapma oyunudur.|Oyuncular farklı karakter sınıflarıyla dünyayı keşfeder ve görevleri tamamlar.|Ekipmanlar ve yetenek kombinasyonları karakter gelişiminde büyük önem taşır.","Bir karakter sınıfı seçerek maceraya başlarsın.|Düşmanlarla karşılaştıkça ekipman ve kaynak toplarsın.|Yetenek ağacını ve eşyalarını kendi oyun tarzına göre geliştirirsin.","Geniş karakter geliştirme sistemi bulunur.|Farklı yetenek ve eşya kombinasyonları sunar.|Tek başına veya çevrim içi olarak oynanabilir.","Tek ve çok oyunculu"],
-["Albion Online","RPG","PC ve Mobil","🛡️",2017,"https://albiononline.com/","Albion Online, oyuncuların ekonomi ve üretim sisteminde önemli rol oynadığı çevrim içi bir fantastik dünyadır.|Kaynak toplayabilir, eşya üretebilir ve diğer oyuncularla ticaret yapabilirsin.|Karakterinin savaş tarzını büyük ölçüde kullandığın ekipman belirler.","Dünyayı keşfederek kaynak toplamaya başlarsın.|Topladığın malzemelerle eşya üretir veya pazarda ticaret yaparsın.|İstersen arkadaşlarınla grup kurarak farklı etkinliklere katılabilirsin.","Oyuncu ekonomisi ve üretim sistemi bulunur.|Farklı bölgeler ve etkinlikler sunar.|Ekipman seçimi karakterinin rolünü belirler.","Çok oyunculu"],
-["RuneScape","RPG","PC","🧙",2001,"https://www.runescape.com/","RuneScape, fantastik bir dünyada görevler ve beceri geliştirme üzerine kurulu çevrim içi rol yapma oyunudur.|Oyuncular farklı meslekleri öğrenebilir ve geniş bir görev dünyasını keşfedebilir.|Her beceri kendi ilerleme sistemine sahiptir.","Bir karakter oluşturarak dünyaya adım atarsın.|Görevleri takip eder, becerilerini geliştirir ve farklı bölgeleri keşfedersin.|İstersen üretim, ticaret veya macera odaklı bir oyun tarzı seçebilirsin.","Çok sayıda görev ve beceri bulunur.|Oyuncular arası ticaret yapılabilir.|Geniş bir çevrim içi dünya sunar.","Çok oyunculu"],
-["EVE Online","Simülasyon","PC","🌌",2003,"https://www.eveonline.com/","EVE Online, geniş bir uzay evreninde gemilerle keşif ve ekonomi yaptığın çevrim içi bir oyundur.|Oyuncular farklı uzay gemileri kullanarak ticaret, keşif ve topluluk etkinliklerine katılır.|Oyuncu toplulukları ve şirketler oyunun dünyasında önemli rol oynar.","Bir uzay gemisi seçerek evrende yolculuk yaparsın.|Kaynak toplama, ticaret veya keşif gibi etkinliklerden birine odaklanabilirsin.|Zamanla gemini ve becerilerini geliştirerek farklı görevler üstlenirsin.","Geniş uzay haritası bulunur.|Oyuncu ekonomisi ve topluluk sistemleri önemlidir.|Farklı gemi türleri ve meslekler sunar.","Çok oyunculu"],
-["Hearthstone","Strateji","PC ve Mobil","🃏",2014,"https://hearthstone.blizzard.com/","Hearthstone, Warcraft evreninden karakterlerin ve büyülerin yer aldığı dijital kart oyunudur.|Oyuncular kendi kart destelerini hazırlayarak sıra tabanlı düellolara katılır.|Her kartın farklı maliyeti ve oyun üzerindeki etkisi bulunur.","Bir deste hazırlayarak karşılaşmaya girersin.|Sıra geldiğinde kartlarını kullanarak rakibinin planını bozmayı hedeflersin.|Kaynaklarını ve kartlarını dikkatli yöneterek maçın kontrolünü sağlamaya çalışırsın.","Farklı kart türleri ve deste seçenekleri bulunur.|Tek kişilik içerikler ve çevrim içi karşılaşmalar vardır.|Strateji ve kart kombinasyonları önemlidir.","Tek ve çok oyunculu"],
-["Marvel Snap","Strateji","PC ve Mobil","🃏",2022,"https://www.marvelsnap.com/","Marvel Snap, Marvel evrenindeki karakterleri kartlarla bir araya getiren hızlı bir strateji oyunudur.|Oyuncular farklı karakterlerden oluşan desteler hazırlar.|Maçlarda birden fazla bölgeyi kontrol ederek rakiplerinden daha yüksek puan elde etmeye çalışırsın.","Deste hazırladıktan sonra kısa bir karşılaşmaya girersin.|Kartlarını farklı bölgelere yerleştirerek puan toplamaya çalışırsın.|Kartların özel etkilerini kullanarak rakibinin hamlelerine karşı plan yaparsın.","Marvel karakterlerinden oluşan kartlar bulunur.|Kısa süreli karşılaşmalar sunar.|Deste oluşturma ve strateji önemlidir.","Çok oyunculu"],
-["Yu-Gi-Oh! Master Duel","Strateji","PC ve Mobil","🐉",2022,"https://www.konami.com/yugioh/masterduel/","Yu-Gi-Oh! Master Duel, Yu-Gi-Oh! kart oyununu dijital ortama taşıyan bir düello oyunudur.|Oyuncular canavar, büyü ve tuzak kartlarından oluşan desteler hazırlar.|Kartların etkilerini birleştirerek rakibine karşı strateji kurarsın.","Önce kendi kart desteni oluşturursun.|Düello sırasında kartları sırayla kullanarak oyun alanını geliştirirsin.|Kart etkilerini ve kombinasyonlarını öğrenmek daha iyi plan yapmana yardımcı olur.","Geniş kart koleksiyonu bulunur.|Tek oyunculu görevler ve çevrim içi düellolar sunar.|Deste oluşturma oyunun merkezindedir.","Tek ve çok oyunculu"],
-["Palia","Simülasyon","PC","🏡",2023,"https://palia.com/","Palia, renkli bir dünyada yaşam kurduğun ve çevreyi keşfettiğin bir simülasyon oyunudur.|Balık tutabilir, bahçecilik yapabilir, yemek hazırlayabilir ve evini tasarlayabilirsin.|Kasabadaki karakterlerle tanışarak görevleri takip edersin.","Önce kendine bir yaşam alanı oluşturursun.|Kaynak toplayarak evini ve bahçeni geliştirebilirsin.|Kasaba çevresini keşfedip farklı etkinliklere katılarak yeni eşyalar kazanırsın.","Ev tasarlama ve kişiselleştirme bulunur.|Balıkçılık, bahçecilik ve üretim sistemleri vardır.|Diğer oyuncularla aynı dünyada vakit geçirebilirsin.","Çok oyunculu özellikli"],
-["Star Trek Online","RPG","PC","🛸",2010,"https://www.playstartrekonline.com/","Star Trek Online, Star Trek bilim kurgu evreninde geçen çevrim içi bir rol yapma oyunudur.|Bir kaptan oluşturur ve uzay gemisinin yönetimini üstlenirsin.|Hikâye görevlerinde farklı gezegenleri ve uzay bölgelerini ziyaret edersin.","Kaptanını ve gemini seçerek görevlere başlarsın.|Uzay yolculukları ve görevler sırasında farklı karakterlerle karşılaşırsın.|İlerledikçe gemini ve mürettebatını geliştirebilirsin.","Uzay gemisi yönetimi bulunur.|Hikâye görevleri ve keşif alanları sunar.|Karakter ve gemi geliştirme seçenekleri vardır.","Çok oyunculu"],
-["Smite 2","Aksiyon","PC ve Konsol","⚡",2024,"https://www.smite2.com/","Smite 2, mitolojik karakterleri kontrol ettiğin üçüncü şahıs bakış açılı bir MOBA oyunudur.|Farklı mitolojilerden tanrılar ve karakterler oyunda yer alır.|Takımınla birlikte harita hedeflerini ele geçirip rakip üssüne ilerlemeye çalışırsın.","Bir karakter seçerek takımındaki rolünü üstlenirsin.|Yeteneklerini ve oyun içi eşyalarını kullanarak takımına destek verirsin.|Haritadaki hedefleri takip ederek takımınla birlikte hareket edersin.","Mitolojik karakterler bulunur.|Takım tabanlı karşılaşmalar sunar.|Farklı yetenek ve oyun tarzları vardır.","Çok oyunculu takım oyunu"],
-["Wuthering Waves","RPG","PC ve Mobil","🌊",2024,"https://wutheringwaves.kurogames.com/","Wuthering Waves, geniş bir dünyada keşif ve hızlı aksiyon savaşları sunduğu bir rol yapma oyunudur.|Oyuncu, geçmişini anlamaya çalışan Rover karakterini kontrol eder.|Dünyada farklı karakterlerle tanışır ve hikâye görevlerini takip edersin.","Açık alanlarda dolaşarak görevleri ve keşif noktalarını bulursun.|Karakterlerin saldırı ve yeteneklerini birleştirerek savaşlara katılırsın.|Yeni karakterler ve ekipmanlarla takımını geliştirebilirsin.","Geniş keşif alanları bulunur.|Hızlı tempolu savaş sistemi vardır.|Farklı karakterlerden takım kurabilirsin.","Tek oyunculu ağırlıklı"],
-["Zenless Zone Zero","Aksiyon","PC ve Mobil","🏙️",2024,"https://zenless.hoyoverse.com/","Zenless Zone Zero, New Eridu isimli şehirde geçen aksiyon rol yapma oyunudur.|Şehirde yaşayan karakterler gizemli Hollow bölgeleriyle bağlantılı görevler üstlenir.|Oyuncu farklı karakterleri bir araya getirerek tehlikeli alanları keşfeder.","Görev öncesinde takımındaki karakterleri seçersin.|Savaşlarda karakterler arasında geçiş yaparak saldırı kombinasyonları oluşturursun.|Görevleri tamamladıkça hikâyede ilerler ve karakterlerini geliştirirsin.","Şehir yaşamı ve görev alanları bir aradadır.|Hızlı aksiyon savaşları bulunur.|Farklı karakterlerden takım oluşturabilirsin.","Tek oyunculu ağırlıklı"],
-["Limbo","Bulmaca","PC","🌑",2010,"https://playdead.com/games/limbo/","Limbo, küçük bir çocuğun karanlık ve gizemli bir dünyadaki yolculuğunu anlatan bulmaca oyunudur.|Oyun boyunca çevresel engeller ve mantık bulmacalarıyla karşılaşırsın.|Hikâye büyük ölçüde görseller ve çevre aracılığıyla anlatılır.","Karakterini bölüm boyunca yönlendirerek ilerlersin.|Nesneleri hareket ettirir ve çevredeki mekanizmaları kullanarak geçiş yolları bulursun.|Engellerin nasıl çalıştığını gözlemleyerek güvenli çözüm yollarını keşfedersin.","Atmosferik siyah beyaz görseller bulunur.|Çevresel bulmacalar oyunun temelidir.|Tek oyunculu hikâye deneyimi sunar.","Tek oyunculu"],
-["Inside","Bulmaca","PC","👁️",2016,"https://playdead.com/games/inside/","Inside, gizemli bir dünyada ilerleyen bir çocuğun hikâyesini anlatır.|Oyun, çevreyi inceleyerek çözmen gereken fizik tabanlı bulmacalar içerir.|Hikâye boyunca dünyanın ne olduğunu anlamaya çalışırsın.","Karakterini farklı alanlarda yönlendirerek ilerlersin.|Nesneleri hareket ettirir, mekanizmaları çalıştırır ve doğru zamanlamayı bulursun.|Yeni alanlara ulaştıkça bulmacaların yapısı değişir.","Atmosferik görsel tasarım bulunur.|Hikâye büyük ölçüde çevreyle anlatılır.|Tek oyunculu bulmaca deneyimi sunar.","Tek oyunculu"],
-["Ori and the Blind Forest","Platform","PC","🌳",2015,"https://www.orithegame.com/","Ori and the Blind Forest, Ori isimli küçük bir ruhun ormanı kurtarma yolculuğunu anlatır.|Nibel Ormanı'nda farklı bölgeleri keşfeder ve yeni karakterlerle karşılaşırsın.|Hikâye, ormanın dengesini yeniden sağlamaya çalışmanı konu alır.","Zıplama ve tırmanma hareketleriyle platform bölümlerini geçersin.|İlerledikçe yeni hareket yetenekleri kazanarak daha önce ulaşamadığın alanlara gidersin.|Bulmacaları çözerek hikâyede ilerlersin.","El çizimi tarzında görseller bulunur.|Keşif ve platform bölümleri bir aradadır.|Hikâye odaklı tek oyunculu deneyim sunar.","Tek oyunculu"],
-["Ori and the Will of the Wisps","Platform","PC","✨",2020,"https://www.orithegame.com/","Ori and the Will of the Wisps, Ori'nin yeni bir maceraya çıktığı platform ve keşif oyunudur.|Farklı bölgelerde yeni karakterler ve gizemlerle karşılaşırsın.|Hikâye boyunca Ori'nin yolculuğunu takip ederek dünyayı keşfedersin.","Yeni hareket yetenekleriyle platform alanlarını geçersin.|Düşmanlarla karşılaşırken farklı saldırı ve savunma seçeneklerini kullanırsın.|Keşif yaptıkça yeni yollar ve geliştirmeler bulabilirsin.","Geniş keşif alanları bulunur.|Hareket ve savaş yetenekleri geliştirilebilir.|Hikâye ve müzik önemli yer tutar.","Tek oyunculu"],
-["Vampire Survivors","Aksiyon","PC ve Mobil","🧛",2022,"https://poncle.games/","Vampire Survivors, giderek artan düşman dalgalarına karşı hayatta kalmaya çalıştığın bir aksiyon oyunudur.|Karakterin otomatik saldırılar yaparken sen hareket ederek alanı kontrol edersin.|Zaman ilerledikçe daha fazla düşman ve yeni zorluklar ortaya çıkar.","Karakterini haritada hareket ettirerek düşmanlardan uzak durursun.|Seviye atladıkça yeni saldırılar ve geliştirmeler arasından seçim yaparsın.|Farklı silahları birleştirerek daha güçlü kombinasyonlar oluşturabilirsin.","Farklı karakterler ve silahlar bulunur.|Kısa ama tekrar oynanabilir bölümler sunar.|Geliştirme kombinasyonları oyunun önemli parçasıdır.","Tek oyunculu"],
-["Brotato","Aksiyon","PC","🥔",2023,"https://store.steampowered.com/app/1942280/Brotato/","Brotato, farklı düşman dalgalarına karşı mücadele eden bir patates karakterini kontrol ettiğin aksiyon oyunudur.|Her turda yeni ekipmanlar ve geliştirmeler seçebilirsin.|Karakterinin özelliklerine göre farklı oyun tarzları oluşturabilirsin.","Düşmanlardan uzak durarak dalganın sonuna kadar hayatta kalmaya çalışırsın.|Tur aralarında mağazadan silah ve eşyalar seçersin.|Seçtiğin ekipmanları birleştirerek karakterinin gücünü artırırsın.","Farklı karakter seçenekleri bulunur.|Çeşitli silah ve eşya kombinasyonları sunar.|Kısa dalga tabanlı karşılaşmalar içerir.","Tek oyunculu"],
-["Enter the Gungeon","Aksiyon","PC","🔫",2016,"https://dodgeroll.com/gungeon/","Enter the Gungeon, silah temalı zindanları keşfettiğin bir aksiyon ve keşif oyunudur.|Her odada farklı düşmanlar ve engellerle karşılaşabilirsin.|Zindanın derinliklerine indikçe yeni eşyalar ve mücadeleler bulursun.","Odaları sırayla geçerek zindanda ilerlersin.|Karakterini hareket ettirip çevredeki engelleri kullanarak karşılaşmaları tamamlarsın.|Bulduğun eşyalar ve ekipmanlar sonraki odalarda işine yarayabilir.","Farklı karakterler ve eşya seçenekleri bulunur.|Her denemede değişen oda düzenleri vardır.|Keşif ve aksiyon bir aradadır.","Tek oyunculu"],
-["Risk of Rain 2","Aksiyon","PC","🌧️",2020,"https://www.riskofrain.com/","Risk of Rain 2, yabancı bir gezegende hayatta kalmaya ve bölümleri geçmeye çalıştığın üçüncü şahıs aksiyon oyunudur.|Farklı karakterler ve ekipmanlar her denemede farklı bir oyun tarzı oluşturabilir.|Zaman ilerledikçe karşılaşmaların zorluğu artar.","Bir karakter seçerek gezegeni keşfetmeye başlarsın.|Haritadaki sandıkları ve kaynakları bularak ekipman kazanırsın.|Bölüm geçişlerini bulup sonraki alana ilerlerken karakterini güçlendirmeye çalışırsın.","Farklı oynanabilir karakterler bulunur.|Tek başına veya arkadaşlarla oynanabilir.|Ekipman kombinasyonları tekrar oynanabilirliği artırır.","Tek ve çok oyunculu"],
-["Valheim","Hayatta Kalma","PC","🪓",2021,"https://www.valheimgame.com/","Valheim, Viking mitolojisinden esinlenen bir dünyada hayatta kalmaya çalıştığın bir keşif oyunudur.|Oyuncular kaynak toplar, barınak kurar ve farklı bölgeleri keşfeder.|Dünyanın farklı alanlarında yeni malzemeler ve zorlu görevler bulunur.","İlk olarak çevreden temel kaynakları toplarsın.|Kendi üssünü kurup araç ve ekipman üretirsin.|Yeni biyomlara geçerek daha gelişmiş kaynaklar bulabilir ve dünyayı keşfedebilirsin.","Üs kurma ve üretim sistemleri bulunur.|Farklı biyomlar keşfedilebilir.|Tek başına veya arkadaşlarla oynanabilir.","Tek ve çok oyunculu"],
-["Raft","Hayatta Kalma","PC","🛶",2022,"https://raft-game.com/","Raft, okyanusun ortasında küçük bir sal üzerinde başladığın hayatta kalma oyunudur.|Denizden gelen kaynakları toplayarak salını büyütür ve geliştirirsin.|Yolculuk sırasında adaları keşfedip hikâyeyle ilgili ipuçları bulabilirsin.","Salının çevresinden geçen malzemeleri toplayarak başlarsın.|Yiyecek ve su ihtiyaçlarını yönetirken yeni üretim araçları hazırlarsın.|Salını genişleterek daha fazla eşya ve üretim alanı oluşturabilirsin.","Sal geliştirme sistemi bulunur.|Adalar ve keşfedilecek alanlar vardır.|Tek başına veya arkadaşlarla oynanabilir.","Tek ve çok oyunculu"],
-["Project Zomboid","Hayatta Kalma","PC","🧟",2013,"https://projectzomboid.com/","Project Zomboid, zombi salgını sonrası bir dünyada hayatta kalmaya çalıştığın açık dünya oyunudur.|Kaynak yönetimi, barınak bulma ve çevreyi keşfetme oyunun temel parçalarıdır.|Karakterinin ihtiyaçlarını takip ederek uzun süre hayatta kalmaya çalışırsın.","Güvenli bir yer bulup yiyecek ve gerekli malzemeleri toplarsın.|Evleri ve çevredeki alanları keşfederek kullanabileceğin eşyalar ararsın.|Karakterinin ihtiyaçlarını yönetip barınağını geliştirmeye çalışırsın.","Geniş açık dünya bulunur.|Üretim ve kaynak yönetimi sistemi vardır.|Tek başına veya çok oyunculu oynanabilir.","Tek ve çok oyunculu"],
-["The Long Dark","Hayatta Kalma","PC","❄️",2017,"https://www.thelongdark.com/","The Long Dark, soğuk ve zorlu bir vahşi doğada hayatta kalmaya çalıştığın bir keşif oyunudur.|Oyuncu yiyecek, su, sıcaklık ve dinlenme gibi ihtiyaçlarını takip eder.|Karlarla kaplı bölgelerde kaynak ararken çevre koşullarını dikkate almalısın.","Haritayı keşfederek barınabilecek yerler ve malzemeler bulursun.|Hava koşullarına uygun kıyafet ve ekipmanları yönetirsin.|Yiyecek ve kaynaklarını dikkatli kullanarak yolculuğunu sürdürürsün.","Hikâye ve hayatta kalma seçenekleri bulunur.|Geniş ve soğuk doğa alanları keşfedilebilir.|Kaynak yönetimi ve planlama önemlidir.","Tek oyunculu"]
-];
+let KEY="";
+let page=1;
+let nextPage=null;
+let currentSearch="";
+let currentGenre="";
+let genres=[];
 
-const grid=document.getElementById("games");
-const search=document.getElementById("search");
-const count=document.getElementById("count");
-const empty=document.getElementById("empty");
-let activeFilter="Hepsi";
-const imageCache={};
-
-function render(){
- const term=search.value.toLocaleLowerCase("tr");
- const filtered=games.filter(g=>
-  (activeFilter==="Hepsi"||g[1]===activeFilter)&&
-  (g[0].toLocaleLowerCase("tr").includes(term)||g[1].toLocaleLowerCase("tr").includes(term))
- );
- grid.innerHTML="";
- count.textContent=filtered.length+" / "+games.length+" OYUN";
- empty.style.display=filtered.length?"none":"block";
- filtered.forEach(g=>{
-  const card=document.createElement("article");
-  card.className="card";
-  card.innerHTML=`<div class="cover"><span class="emoji">${g[3]}</span></div><div class="cardbody"><h3>${g[0]}</h3><div class="meta">${g[2]} · ${g[4]}</div><span class="tag">${g[1]}</span></div>`;
-  card.onclick=()=>openGame(g);
-  grid.appendChild(card);
-  loadCover(g,card.querySelector(".cover"));
- });
+function showTab(tab){
+ document.getElementById("games").style.display=tab==="games"?"grid":"none";
+ document.getElementById("gameArea").style.display=tab==="games"&&KEY?"block":"none";
+ document.getElementById("news").style.display=tab==="news"?"block":"none";
+ document.getElementById("gamesTab").classList.toggle("active",tab==="games");
+ document.getElementById("newsTab").classList.toggle("active",tab==="news");
+ if(tab==="news"&&!document.getElementById("newsList").children.length)loadNews();
 }
 
-async function loadCover(g,el){
- if(imageCache[g[0]]===null)return;
- if(imageCache[g[0]]){
-  el.innerHTML=`<img loading="lazy" src="${imageCache[g[0]]}" alt="${g[0]}">`;
-  return;
- }
+async function api(path){
+ const url="https://api.rawg.io/api/"+path+(path.includes("?")?"&":"?")+"key="+encodeURIComponent(KEY);
+ const response=await fetch(url);
+ if(!response.ok)throw new Error("RAWG bağlantı hatası: "+response.status);
+ return response.json();
+}
+
+async function start(){
+ KEY=document.getElementById("apiKey").value.trim();
+ if(!KEY){alert("Önce RAWG API anahtarını gir.");return}
  try{
-  const url="https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch="+encodeURIComponent(g[0])+"&gsrnamespace=0&gsrlimit=1&prop=pageimages&piprop=thumbnail&pithumbsize=500&format=json&origin=*";
-  const r=await fetch(url);
-  const d=await r.json();
-  const pages=d.query?.pages;
-  const img=pages?Object.values(pages)[0]?.thumbnail?.source:null;
-  imageCache[g[0]]=img||null;
-  if(img&&el.isConnected)el.innerHTML=`<img loading="lazy" src="${img}" alt="${g[0]}">`;
- }catch(e){imageCache[g[0]]=null;}
+  document.getElementById("status").textContent="Bağlanılıyor...";
+  const data=await api("genres?page_size=40");
+  genres=data.results||[];
+  const select=document.getElementById("genre");
+  select.innerHTML='<option value="">Tüm türler</option>';
+  genres.forEach(g=>{
+   const option=document.createElement("option");
+   option.value=g.slug;
+   option.textContent=g.name;
+   select.appendChild(option);
+  });
+  document.getElementById("games").style.display="none";
+  document.getElementById("gameArea").style.display="block";
+  await searchGames();
+ }catch(e){
+  document.getElementById("status").textContent=e.message+" — API anahtarını kontrol et.";
+ }
 }
 
-function addLines(id,text){
- const box=document.getElementById(id);
- box.innerHTML="";
- text.split("|").forEach(line=>{
-  const p=document.createElement("div");
-  p.className="description-line";
-  p.textContent=line;
-  box.appendChild(p);
+async function searchGames(reset=true){
+ if(!KEY)return;
+ if(reset){
+  page=1;
+  currentSearch=document.getElementById("search").value.trim();
+  currentGenre=document.getElementById("genre").value;
+  document.getElementById("gameGrid").innerHTML="";
+ }
+ document.getElementById("status").textContent="Oyunlar yükleniyor...";
+ try{
+  let params="games?page="+page+"&page_size=24&ordering=-rating";
+  if(currentSearch)params+="&search="+encodeURIComponent(currentSearch);
+  if(currentGenre)params+="&genres="+encodeURIComponent(currentGenre);
+  const data=await api(params);
+  nextPage=data.next;
+  renderGames(data.results||[]);
+  document.getElementById("status").textContent=
+   (data.count||0).toLocaleString("tr-TR")+" oyun bulundu. Gösterilen: "+
+   document.getElementById("gameGrid").children.length;
+  document.getElementById("more").style.display=nextPage?"block":"none";
+ }catch(e){
+  document.getElementById("status").textContent=e.message;
+ }
+}
+
+function renderGames(items){
+ const grid=document.getElementById("gameGrid");
+ items.forEach(game=>{
+  const card=document.createElement("article");
+  card.className="game";
+  const image=document.createElement("img");
+  image.src=game.background_image||"";
+  image.alt=game.name;
+  image.loading="lazy";
+  const info=document.createElement("div");
+  info.className="game-info";
+  const title=document.createElement("h3");
+  title.textContent=game.name;
+  const meta=document.createElement("div");
+  meta.className="small";
+  meta.textContent="⭐ "+(game.rating||"Puan yok")+" · "+(game.released||"Tarih yok");
+  info.append(title,meta);
+  card.append(image,info);
+  card.onclick=()=>openGame(game.id);
+  grid.appendChild(card);
  });
 }
 
-function openGame(g){
- document.getElementById("modalname").textContent=g[0];
- document.getElementById("modalmeta").textContent=g[1]+" · "+g[2]+" · "+g[4];
- addLines("description",g[6]);
- addLines("gameplay",g[7]);
- addLines("features",g[8]);
- document.getElementById("genre").textContent=g[1];
- document.getElementById("platform").textContent=g[2];
- document.getElementById("year").textContent=g[4];
- document.getElementById("mode").textContent=g[9];
- const cover=document.getElementById("modalcover");
- cover.innerHTML="<span>"+g[3]+"</span>";
- if(imageCache[g[0]])cover.innerHTML=`<img src="${imageCache[g[0]]}" alt="${g[0]}">`;
- document.getElementById("official").href=g[5];
- document.getElementById("modal").classList.add("show");
+async function loadMore(){
+ if(!nextPage)return;
+ page++;
+ await searchGames(false);
 }
 
-document.getElementById("close").onclick=()=>document.getElementById("modal").classList.remove("show");
-document.getElementById("modal").onclick=e=>{if(e.target.id==="modal")e.currentTarget.classList.remove("show")};
-document.addEventListener("keydown",e=>{if(e.key==="Escape")document.getElementById("modal").classList.remove("show")});
-search.addEventListener("input",render);
-document.getElementById("filters").addEventListener("click",e=>{
- if(e.target.tagName!=="BUTTON")return;
- document.querySelectorAll(".filters button").forEach(b=>b.classList.remove("active"));
- e.target.classList.add("active");
- activeFilter=e.target.dataset.filter;
- render();
-});
-render();
+async function openGame(id){
+ document.getElementById("modal").style.display="block";
+ document.getElementById("detail").textContent="Oyun bilgileri yükleniyor...";
+ try{
+  const g=await api("games/"+id);
+  const box=document.getElementById("detail");
+  box.innerHTML="";
+  const h=document.createElement("h2");h.textContent=g.name;
+  box.appendChild(h);
+  if(g.background_image){
+   const img=document.createElement("img");img.src=g.background_image;img.alt=g.name;box.appendChild(img);
+  }
+  const p=document.createElement("p");
+  p.textContent="⭐ "+(g.rating||"Puan yok")+" | Metacritic: "+(g.metacritic||"Yok")+" | Çıkış: "+(g.released||"Bilinmiyor");
+  box.appendChild(p);
+  const desc=document.createElement("p");
+  desc.textContent=g.description_raw||"Bu oyun için açıklama bulunamadı.";
+  box.appendChild(desc);
+  const platforms=document.createElement("p");
+  platforms.textContent="Platformlar: "+(g.platforms||[]).map(x=>x.platform.name).join(", ");
+  box.appendChild(platforms);
+  const genre=document.createElement("p");
+  genre.textContent="Türler: "+(g.genres||[]).map(x=>x.name).join(", ");
+  box.appendChild(genre);
+  if(g.website){
+   const a=document.createElement("a");a.href=g.website;a.target="_blank";a.rel="noopener";a.textContent="Resmî oyun sitesi";box.appendChild(a);
+  }
+ }catch(e){document.getElementById("detail").textContent=e.message}
+}
+function closeModal(){document.getElementById("modal").style.display="none"}
+
+async function loadNews(){
+ const list=document.getElementById("newsList");
+ const status=document.getElementById("newsStatus");
+ list.innerHTML="";
+ status.textContent="Haberler getiriliyor...";
+ const feed="https://news.google.com/rss/search?q=video+game+updates+OR+oyun+g%C3%BCncelleme&hl=tr&gl=TR&ceid=TR:tr";
+ try{
+  const response=await fetch("https://api.allorigins.win/raw?url="+encodeURIComponent(feed));
+  if(!response.ok)throw new Error("Haber kaynağına ulaşılamadı.");
+  const xml=new DOMParser().parseFromString(await response.text(),"text/xml");
+  const items=[...xml.querySelectorAll("item")].slice(0,25);
+  if(!items.length)throw new Error("Şu anda haber bulunamadı.");
+  items.forEach(item=>{
+   const row=document.createElement("div");row.className="news-item";
+   const a=document.createElement("a");
+   a.href=item.querySelector("link")?.textContent||"#";
+   a.target="_blank";a.rel="noopener";
+   a.textContent=item.querySelector("title")?.textContent||"Haber";
+   const p=document.createElement("p");
+   p.textContent=(item.querySelector("pubDate")?.textContent||"")+
+    " · "+(item.querySelector("source")?.textContent||"Haber kaynağı");
+   row.append(a,p);list.appendChild(row);
+  });
+  status.textContent=items.length+" haber gösteriliyor.";
+ }catch(e){
+  status.textContent="Haberler şu anda yüklenemedi. Daha sonra tekrar deneyebilirsin.";
+ }
+}
 </script>
 </body>
 </html>
