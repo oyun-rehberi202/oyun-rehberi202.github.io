@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OYUN REHBERİ</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#090d1b;color:white;font-family:Arial,sans-serif;
+ background-image:radial-gradient(circle at 15% 10%,#25205b,transparent 35%),radial-gradient(circle at 85% 80%,#142e55,transparent 35%);
+ min-height:100vh
+}
+header{text-align:center;padding:35px 15px 20px}
+header h1{font-size:38px;margin:0;color:#8c7cff;text-shadow:0 0 20px #6554ff}
+header p{color:#aab2d1}
+.controls{max-width:1100px;margin:15px auto;padding:0 15px;display:flex;gap:10px;flex-wrap:wrap}
+input,select{background:#151b31;color:white;border:1px solid #343c61;padding:13px;border-radius:10px;font-size:15px;outline:none}
+input{flex:1;min-width:180px}
+select{min-width:140px}
+#games{max-width:1100px;margin:20px auto;padding:0 15px;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+.card{background:#151b31;border:1px solid #293253;border-radius:15px;overflow:hidden;cursor:pointer;transition:.25s}
+.card:hover{transform:translateY(-7px);border-color:#8878ff;box-shadow:0 10px 30px #6554ff35}
+.cover{height:125px;background:linear-gradient(135deg,#242052,#17416b);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.cover img{width:100%;height:100%;object-fit:cover}
+.cover span{font-size:48px}
+.info{padding:13px}
+.info h3{margin:0 0 9px;font-size:18px}
+.tag{font-size:12px;color:#a9a4ff;background:#28234b;padding:5px 8px;border-radius:7px;display:inline-block}
+.platform{font-size:12px;color:#9da8c7;margin-left:5px}
+.card p{font-size:13px;color:#aab2c9;margin-bottom:0}
+#modal{display:none;position:fixed;inset:0;background:#000c;z-index:10;overflow:auto;padding:20px}
+.modalbox{max-width:650px;margin:30px auto;background:#141a30;border:1px solid #454b78;border-radius:18px;padding:22px;position:relative}
+.close{position:absolute;right:17px;top:13px;border:0;background:#302d55;color:white;padding:9px 13px;border-radius:8px;cursor:pointer}
+#detailImage{width:100%;height:190px;object-fit:cover;border-radius:12px;background:#25234c}
+#detailEmoji{font-size:60px;text-align:center;margin:10px}
+.modalbox h2{color:#a99cff}
+.modalbox p{color:#d0d5e8;line-height:1.6}
+.download{display:inline-block;background:#6c58e8;color:white;text-decoration:none;padding:12px 17px;border-radius:9px;margin:10px 0}
+textarea{width:100%;min-height:75px;background:#0c1225;color:white;border:1px solid #343c61;border-radius:10px;padding:12px;resize:vertical}
+button{cursor:pointer}
+#send{background:#6c58e8;color:white;border:0;padding:10px 16px;border-radius:8px;margin-top:8px}
+.comment{background:#202844;padding:10px;border-radius:8px;margin:8px 0;overflow-wrap:anywhere}
+footer{text-align:center;color:#7883a5;padding:30px}
+.empty{text-align:center;color:#aab2c9;grid-column:1/-1}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🎮 OYUN REHBERİ</h1>
+<p>Oyunları keşfet, bilgilerini öğren ve yorumlarını paylaş!</p>
+</header>
+
+<div class="controls">
+<input id="search" placeholder="🔍 Oyun ara...">
+<select id="platform">
+<option value="Hepsi">Tüm platformlar</option>
+<option value="PC">PC</option>
+<option value="Mobil">Mobil</option>
+</select>
+<select id="genre">
+<option value="Hepsi">Tüm türler</option>
+<option value="FPS">FPS</option>
+<option value="Aksiyon">Aksiyon</option>
+<option value="Hayatta Kalma">Hayatta Kalma</option>
+<option value="Simülasyon">Simülasyon</option>
+<option value="Yarış">Yarış</option>
+<option value="Strateji">Strateji</option>
+<option value="Korku">Korku</option>
+<option value="Macera">Macera</option>
+<option value="Bulmaca">Bulmaca</option>
+<option value="Spor">Spor</option>
+</select>
+</div>
+
+<div id="games"></div>
+
+<div id="modal">
+<div class="modalbox">
+<button class="close" onclick="closeModal()">✕</button>
+<div id="detailEmoji"></div>
+<img id="detailImage" style="display:none">
+<h2 id="detailName"></h2>
+<p id="detailTags"></p>
+<p id="detailDescription"></p>
+<p><b>💾 Kurulum boyutu:</b> <span id="detailSize"></span></p>
+<p><b>🎯 Nasıl oynanır?</b></p>
+<p id="detailHow"></p>
+<a id="download" class="download" target="_blank" rel="noopener">⬇ Resmî indirme sayfası</a>
+<hr style="border-color:#343c61;margin:20px 0">
+<h3>💬 Yorumlar</h3>
+<div id="comments"></div>
+<textarea id="commentInput" placeholder="Yorumunu yaz..."></textarea>
+<button id="send" onclick="addComment()">Yorum gönder</button>
+<p style="font-size:11px;color:#8994b5">Yorumlar yalnızca bu tarayıcıda saklanır.</p>
+</div>
+</div>
+
+<footer>OYUN REHBERİ • Oyun keşfetmenin kolay yolu 🎮</footer>
+
+<script>
+const games=[
+{name:"VALORANT",platform:"PC",genre:"FPS",emoji:"🎯",size:"Değişken",image:"https://cmsassets.rgpub.io/sanity/images/dsfx7636/news_live/8cbd6a6c7f9c6c8d9f6e4f0b7c1e4f4e2f0f2a7f-1920x1080.jpg",url:"https://playvalorant.com/tr-tr/",desc:"Rekabetçi taktiksel nişancı oyunu.",how:"Ajanının yeteneklerini kullan ve takımınla hedefleri tamamla."},
+{name:"League of Legends",platform:"PC",genre:"Strateji",emoji:"⚔️",size:"Değişken",url:"https://www.leagueoflegends.com/tr-tr/",desc:"Takım tabanlı MOBA oyunu.",how:"Takım arkadaşlarınla haritada ilerle ve rakip yapıları yok et."},
+{name:"Teamfight Tactics",platform:"PC",genre:"Strateji",emoji:"♟️",size:"Değişken",url:"https://teamfighttactics.leagueoflegends.com/",desc:"Otomatik savaşlara dayanan strateji oyunu.",how:"Şampiyonlarını seç ve takımını kur."},
+{name:"Legends of Runeterra",platform:"PC",genre:"Strateji",emoji:"🃏",size:"Değişken",url:"https://playruneterra.com/",desc:"Kart tabanlı strateji oyunu.",how:"Kartlarını kullanarak rakibini yen."},
+{name:"Counter-Strike 2",platform:"PC",genre:"FPS",emoji:"🎯",size:"Değişken",app:730,url:"https://store.steampowered.com/app/730/",desc:"Takım tabanlı rekabetçi FPS oyunu.",how:"Takımının görevini tamamla."},
+{name:"Dota 2",platform:"PC",genre:"Strateji",emoji:"🛡️",size:"Değişken",app:570,url:"https://store.steampowered.com/app/570/",desc:"Strateji ve takım çalışmasına dayalı MOBA.",how:"Kahramanını geliştir ve rakip üssü yok et."},
+{name:"Fortnite",platform:"PC",genre:"Hayatta Kalma",emoji:"🏝️",size:"Değişken",url:"https://www.fortnite.com/",desc:"Battle Royale ve farklı oyun modları.",how:"Ekipman bul ve maçta hayatta kal."},
+{name:"Minecraft",platform:"PC",genre:"Hayatta Kalma",emoji:"⛏️",size:"Değişken",image:"https://www.minecraft.net/content/dam/minecraftnet/games/minecraft/key-art/NewKeyArt_Header.jpg",url:"https://www.minecraft.net/tr-tr",desc:"Bloklardan oluşan dünyada keşif ve inşa oyunu.",how:"Kaynak topla, araç üret ve dünyayı keşfet."},
+{name:"Roblox",platform:"PC",genre:"Macera",emoji:"🟥",size:"Değişken",image:"https://commons.wikimedia.org/wiki/Special:FilePath/Roblox_Icon_Transparent.png",url:"https://www.roblox.com/",desc:"Oyuncuların oluşturduğu oyun platformu.",how:"İstediğin oyunu seç ve görevleri tamamla."},
+{name:"PUBG Battlegrounds",platform:"PC",genre:"FPS",emoji:"🪖",size:"Değişken",app:578080,url:"https://store.steampowered.com/app/578080/",desc:"Battle Royale oyunu.",how:"Haritaya in, ekipman bul ve hayatta kal."},
+{name:"Apex Legends",platform:"PC",genre:"FPS",emoji:"🚀",size:"Değişken",app:1172470,url:"https://www.ea.com/games/apex-legends",desc:"Karakter yeteneklerine dayalı FPS.",how:"Karakterini seç ve takımınla mücadele et."},
+{name:"Overwatch 2",platform:"PC",genre:"FPS",emoji:"🦸",size:"Değişken",app:2357570,url:"https://overwatch.blizzard.com/",desc:"Kahraman tabanlı takım oyunu.",how:"Kahramanını seç ve hedefleri tamamla."},
+{name:"Rocket League",platform:"PC",genre:"Spor",emoji:"🚗",size:"Değişken",app:252950,url:"https://www.rocketleague.com/",desc:"Arabalarla futbol oyunu.",how:"Aracınla topa vur ve gol at."},
+{name:"Fall Guys",platform:"PC",genre:"Aksiyon",emoji:"🫘",size:"Değişken",app:1097150,url:"https://www.fallguys.com/",desc:"Engelli parkur oyunu.",how:"Engelleri aş ve bitişe ulaş."},
+{name:"The Sims 4",platform:"PC",genre:"Simülasyon",emoji:"🏠",size:"Değişken",app:1222670,url:"https://www.ea.com/games/the-sims/the-sims-4",desc:"Yaşam simülasyonu.",how:"Karakterler oluştur ve hayatlarını yönet."},
+{name:"Terraria",platform:"PC",genre:"Macera",emoji:"🌳",size:"Değişken",app:105600,url:"https://store.steampowered.com/app/105600/",desc:"Keşif ve üretim oyunu.",how:"Kaynak topla ve dünyayı keşfet."},
+{name:"Stardew Valley",platform:"PC",genre:"Simülasyon",emoji:"🌻",size:"Değişken",app:413150,url:"https://store.steampowered.com/app/413150/",desc:"Çiftlik ve kasaba yaşamı oyunu.",how:"Ekin ek ve çiftliğini geliştir."},
+{name:"Euro Truck Simulator 2",platform:"PC",genre:"Simülasyon",emoji:"🚛",size:"Değişken",app:227300,url:"https://store.steampowered.com/app/227300/",desc:"Kamyon sürüş simülasyonu.",how:"Yükleri teslim et ve şirketini büyüt."},
+{name:"GTA V",platform:"PC",genre:"Aksiyon",emoji:"🚘",size:"Değişken",app:271590,url:"https://store.steampowered.com/app/271590/",desc:"Açık dünya aksiyon oyunu. Yaş sınıflandırmasına dikkat et.",how:"Hikâyeyi takip et ve açık dünyayı keşfet."},
+{name:"Metin2",platform:"PC",genre:"Macera",emoji:"🐉",size:"Değişken",url:"https://www.metin2.gameforge.com/",desc:"Fantastik MMORPG.",how:"Karakterini geliştir ve görevleri tamamla."},
+{name:"CrossFire",platform:"PC",genre:"FPS",emoji:"🎯",size:"Değişken",url:"https://www.crossfirestars.com/",desc:"Takım tabanlı FPS.",how:"Takımınla oyun modunun hedefini tamamla."},
+{name:"Point Blank",platform:"PC",genre:"FPS",emoji:"🎮",size:"Değişken",url:"https://www.pointblank.com.tr/",desc:"Çevrim içi FPS.",how:"Takımınla birlikte mücadele et."},
+{name:"Brawl Stars",platform:"Mobil",genre:"Aksiyon",emoji:"⭐",size:"Değişken",url:"https://supercell.com/en/games/brawlstars/",desc:"Kısa takım savaşları.",how:"Karakterini seç ve oyun modunun hedefini tamamla."},
+{name:"Clash Royale",platform:"Mobil",genre:"Strateji",emoji:"👑",size:"Değişken",url:"https://supercell.com/en/games/clashroyale/",desc:"Kart ve kule strateji oyunu.",how:"Kartlarını kullanarak rakibin kulelerini yık."},
+{name:"Clash of Clans",platform:"Mobil",genre:"Strateji",emoji:"🏰",size:"Değişken",url:"https://supercell.com/en/games/clashofclans/",desc:"Köy kurma oyunu.",how:"Köyünü geliştir ve birliklerini eğit."},
+{name:"Hay Day",platform:"Mobil",genre:"Simülasyon",emoji:"🚜",size:"Değişken",url:"https://supercell.com/en/games/hayday/",desc:"Çiftlik yönetme oyunu.",how:"Ürün yetiştir ve çiftliğini büyüt."},
+{name:"PUBG Mobile",platform:"Mobil",genre:"FPS",emoji:"🪖",size:"Değişken",url:"https://www.pubgmobile.com/",desc:"Mobil Battle Royale oyunu.",how:"Haritaya in ve takımınla maçta kal."},
+{name:"Free Fire",platform:"Mobil",genre:"FPS",emoji:"🔥",size:"Değişken",url:"https://ff.garena.com/",desc:"Hızlı Battle Royale maçları.",how:"Maçta hayatta kalmaya çalış."},
+{name:"Call of Duty Mobile",platform:"Mobil",genre:"FPS",emoji:"🎖️",size:"Değişken",url:"https://www.callofduty.com/mobile",desc:"Mobil FPS oyunu.",how:"Oyun modunu seç ve hedefleri tamamla."},
+{name:"Mobile Legends",platform:"Mobil",genre:"Strateji",emoji:"⚔️",size:"Değişken",url:"https://www.mobilelegends.com/",desc:"Mobil MOBA oyunu.",how:"Bir kahraman seç ve takımınla mücadele et."},
+{name:"Genshin Impact",platform:"Mobil",genre:"Macera",emoji:"✨",size:"Değişken",url:"https://genshin.hoyoverse.com/",desc:"Açık dünyalı aksiyon RPG.",how:"Dünyayı keşfet ve görevleri tamamla."},
+{name:"Honkai Star Rail",platform:"Mobil",genre:"Macera",emoji:"🚄",size:"Değişken",url:"https://hsr.hoyoverse.com/",desc:"Sıra tabanlı fantastik RPG.",how:"Ekibini kur ve savaşlara katıl."},
+{name:"Zenless Zone Zero",platform:"Mobil",genre:"Aksiyon",emoji:"🌆",size:"Değişken",url:"https://zenless.hoyoverse.com/",desc:"Aksiyon odaklı fantastik oyun.",how:"Karakterlerini seç ve görevleri tamamla."},
+{name:"Subway Surfers",platform:"Mobil",genre:"Aksiyon",emoji:"🚆",size:"Değişken",url:"https://sybogames.com/",desc:"Sonsuz koşu oyunu.",how:"Engellerden kaç ve altınları topla."},
+{name:"Temple Run 2",platform:"Mobil",genre:"Aksiyon",emoji:"🏃",size:"Değişken",url:"https://imangistudios.com/",desc:"Sonsuz koşu oyunu.",how:"Engellerden kaç ve ilerle."},
+{name:"Candy Crush Saga",platform:"Mobil",genre:"Bulmaca",emoji:"🍬",size:"Değişken",url:"https://www.king.com/game/candycrush",desc:"Şeker eşleştirme bulmacası.",how:"Aynı renkteki şekerleri eşleştir."},
+{name:"Stumble Guys",platform:"Mobil",genre:"Aksiyon",emoji:"🏁",size:"Değişken",url:"https://www.stumbleguys.com/",desc:"Engelli parkur oyunu.",how:"Rakiplerinden önce bitişe ulaş."},
+{name:"Among Us",platform:"Mobil",genre:"Aksiyon",emoji:"👨‍🚀",size:"Değişken",app:945360,url:"https://store.steampowered.com/app/945360/",desc:"Sosyal çıkarım oyunu.",how:"Görevleri tamamla ve şüpheli durumları anlamaya çalış."},
+{name:"Pokémon GO",platform:"Mobil",genre:"Macera",emoji:"⚡",size:"Değişken",url:"https://pokemongolive.com/",desc:"Gerçek dünya keşif oyunu.",how:"Pokémon'ları keşfet ve koleksiyonunu geliştir."},
+{name:"Asphalt Legends",platform:"Mobil",genre:"Yarış",emoji:"🏎️",size:"Değişken",url:"https://asphaltlegends.com/",desc:"Araba yarışı oyunu.",how:"Yarışlara katıl ve araçlarını geliştir."},
+{name:"EA SPORTS FC Mobile",platform:"Mobil",genre:"Spor",emoji:"⚽",size:"Değişken",url:"https://www.ea.com/games/ea-sports-fc/fc-mobile",desc:"Mobil futbol oyunu.",how:"Takımını kur ve maçlara katıl."},
+{name:"eFootball",platform:"Mobil",genre:"Spor",emoji:"⚽",size:"Değişken",url:"https://www.konami.com/efootball/",desc:"Futbol simülasyonu.",how:"Takımını seç ve maç yap."},
+{name:"8 Ball Pool",platform:"Mobil",genre:"Spor",emoji:"🎱",size:"Değişken",url:"https://www.miniclip.com/games/8-ball-pool-multiplayer/",desc:"Bilardo oyunu.",how:"Topları deliklere sok ve maçı kazan."},
+{name:"Royal Match",platform:"Mobil",genre:"Bulmaca",emoji:"👑",size:"Değişken",url:"https://dreamgames.com/",desc:"Eşleştirme bulmacası.",how:"Parçaları eşleştir ve bölüm hedefini tamamla."},
+{name:"Block Blast",platform:"Mobil",genre:"Bulmaca",emoji:"🧩",size:"Değişken",url:"https://hungry-studio.com/",desc:"Blok yerleştirme bulmacası.",how:"Satır ve sütunları tamamla."}
+];
+
+function imageUrl(g){
+ if(g.image)return g.image;
+ if(g.app)return "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/"+g.app+"/header.jpg";
+ return "";
+}
+
+function showGames(){
+ const q=document.getElementById("search").value.toLowerCase();
+ const p=document.getElementById("platform").value;
+ const genre=document.getElementById("genre").value;
+ const box=document.getElementById("games");
+ box.innerHTML="";
+ const filtered=games.filter(g=>g.name.toLowerCase().includes(q)&&(p==="Hepsi"||g.platform===p)&&(genre==="Hepsi"||g.genre===genre));
+ if(!filtered.length){box.innerHTML='<div class="empty">Oyun bulunamadı 😕</div>';return;}
+ filtered.forEach(g=>{
+  const card=document.createElement("div");card.className="card";
+  const cover=document.createElement("div");cover.className="cover";
+  const emoji=document.createElement("span");emoji.textContent=g.emoji;
+  cover.appendChild(emoji);
+  const src=imageUrl(g);
+  if(src){
+   const img=document.createElement("img");
+   img.alt=g.name+" kapak resmi";
+   img.src=src;
+   img.onload=()=>{emoji.style.display="none";};
+   img.onerror=()=>{img.remove();emoji.style.display="inline";};
+   cover.appendChild(img);
+  }
+  const info=document.createElement("div");info.className="info";
+  const h=document.createElement("h3");h.textContent=g.name;
+  const tag=document.createElement("span");tag.className="tag";tag.textContent=g.genre;
+  const platform=document.createElement("span");platform.className="platform";platform.textContent=g.platform;
+  const desc=document.createElement("p");desc.textContent=g.desc;
+  info.append(h,tag,platform,desc);card.append(cover,info);
+  card.onclick=()=>openModal(g);box.appendChild(card);
+ });
+}
+
+function openModal(g){
+ document.getElementById("modal").style.display="block";
+ document.getElementById("detailName").textContent=g.name;
+ document.getElementById("detailTags").textContent=g.platform+" • "+g.genre;
+ document.getElementById("detailDescription").textContent=g.desc;
+ document.getElementById("detailSize").textContent=g.size;
+ document.getElementById("detailHow").textContent=g.how;
+ document.getElementById("detailEmoji").textContent=g.emoji;
+ const img=document.getElementById("detailImage");
+ const src=imageUrl(g);
+ img.style.display="none";
+ if(src){
+  img.onload=()=>{img.style.display="block";document.getElementById("detailEmoji").style.display="none";};
+  img.onerror=()=>{img.style.display="none";document.getElementById("detailEmoji").style.display="block";};
+  img.src=src;
+ }else{
+  document.getElementById("detailEmoji").style.display="block";
+ }
+ document.getElementById("download").href=g.url;
+ window.selectedGame=g.name;
+ document.getElementById("commentInput").value="";
+ showComments();
+}
+function closeModal(){document.getElementById("modal").style.display="none";}
+function showComments(){
+ const box=document.getElementById("comments");box.innerHTML="";
+ const data=JSON.parse(localStorage.getItem("oyunYorumlari")||"{}");
+ const list=data[window.selectedGame]||[];
+ if(!list.length)box.innerHTML='<p style="color:#8994b5">Henüz yorum yok. İlk yorumu sen yaz!</p>';
+ list.forEach(c=>{const d=document.createElement("div");d.className="comment";d.textContent="💬 "+c;box.appendChild(d);});
+}
+function addComment(){
+ const input=document.getElementById("commentInput");
+ const value=input.value.trim();if(!value)return;
+ const data=JSON.parse(localStorage.getItem("oyunYorumlari")||"{}");
+ if(!data[window.selectedGame])data[window.selectedGame]=[];
+ data[window.selectedGame].push(value);
+ localStorage.setItem("oyunYorumlari",JSON.stringify(data));
+ input.value="";showComments();
+}
+document.getElementById("search").addEventListener("input",showGames);
+document.getElementById("platform").addEventListener("change",showGames);
+document.getElementById("genre").addEventListener("change",showGames);
+document.getElementById("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal();});
+showGames();
+</script>
+</body>
+</html>
